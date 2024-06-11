@@ -12,7 +12,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id", callSuper = false)
-@Entity(name = "tb_clients")
+@Entity()
+@Table(name = "tb_clients")
 public class Client{
 
     @Id

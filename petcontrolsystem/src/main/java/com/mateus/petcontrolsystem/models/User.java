@@ -10,7 +10,8 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id", callSuper = false)
-@Entity(name = "tb_users")
+@Entity()
+@Table(name = "tb_users")
 public class User {
 
     @Id
