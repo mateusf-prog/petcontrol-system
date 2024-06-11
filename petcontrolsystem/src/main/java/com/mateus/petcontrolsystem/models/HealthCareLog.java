@@ -1,6 +1,7 @@
 package com.mateus.petcontrolsystem.models;
 
 import com.mateus.petcontrolsystem.models.enums.TreatmentType;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -10,13 +11,19 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
+@Entity
+@Table(name = "tb_health_care_logs")
 public class HealthCareLog {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private LocalDate applicationDate;
     private String details;
 
+    @Enumerated(EnumType.STRING)
     private TreatmentType type;
 
+    @ManyToOne
     private Pet pet;
 }

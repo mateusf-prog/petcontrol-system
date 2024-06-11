@@ -29,7 +29,8 @@ public class Client{
 
     @OneToOne
     private Address address;
+    @OneToMany(mappedBy = "client")
+    private List<Pet> pets = new ArrayList<>();
 //    private List<Agenda> appointments = new ArrayList<>();
 //    private List<Order> orders = new ArrayList<>();
-//    private List<Pet> pets = new ArrayList<>();
 }
