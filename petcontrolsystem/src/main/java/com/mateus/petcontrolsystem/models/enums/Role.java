@@ -1,6 +1,6 @@
 package com.mateus.petcontrolsystem.models.enums;
 
-public enum Roles {
+public enum Role {
 
     ADMIN,
     COMMON;

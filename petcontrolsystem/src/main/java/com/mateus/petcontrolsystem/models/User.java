@@ -1,6 +1,6 @@
 package com.mateus.petcontrolsystem.models;
 
-import com.mateus.petcontrolsystem.models.enums.Roles;
+import com.mateus.petcontrolsystem.models.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,7 +25,7 @@ public class User {
 
 
     @Enumerated(EnumType.STRING)
-    private Roles role;
+    private Role role;
 
     @OneToOne
     private Address address;
