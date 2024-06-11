@@ -1,7 +1,9 @@
 package com.mateus.petcontrolsystem.models;
 
+import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,13 +12,23 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id", callSuper = false)
-public class Client extends Person {
+@Entity(name = "tb_clients")
+public class Client{
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String name;
     private String cpf;
+    private String email;
+    private String phone;
 
+    @Column(columnDefinition = "DATE")
+    private LocalDate birthDate;
+
+    @OneToOne
     private Address address;
-    private List<Agenda> appointments = new ArrayList<>();
-    private List<Order> orders = new ArrayList<>();
-    private List<Pet> pets = new ArrayList<>();
+//    private List<Agenda> appointments = new ArrayList<>();
+//    private List<Order> orders = new ArrayList<>();
+//    private List<Pet> pets = new ArrayList<>();
 }

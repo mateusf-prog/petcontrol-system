@@ -1,5 +1,6 @@
 package com.mateus.petcontrolsystem.models;
 
+import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
@@ -7,8 +8,11 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
+@Entity(name = "tb_address")
 public class Address {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Integer cep;
     private String street;
@@ -17,7 +21,9 @@ public class Address {
     private String city;
     private String uf;
 
+    @OneToOne(mappedBy = "address")
     private User user;
 
+    @OneToOne(mappedBy = "address")
     private Client client;
 }

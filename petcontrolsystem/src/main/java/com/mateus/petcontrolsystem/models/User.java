@@ -1,6 +1,7 @@
 package com.mateus.petcontrolsystem.models;
 
 import com.mateus.petcontrolsystem.models.enums.Roles;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -9,21 +10,25 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id", callSuper = false)
-public class User extends Person {
+@Entity(name = "tb_users")
+public class User {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String name;
+    private String email;
+    private String phone;
+    private LocalDate birthDate;
     private String password;
     private String cpfCnpj;
 
+
+    @Enumerated(EnumType.STRING)
     private Roles role;
 
+    @OneToOne
     private Address address;
 
-    public User(String name, String email, String phone, LocalDate birthDate, Long id, String password, String cpfCnpj, Address address) {
-        super(name, email, phone, birthDate);
-        this.id = id;
-        this.password = password;
-        this.cpfCnpj = cpfCnpj;
-        this.address = address;
-    }
+
 }
