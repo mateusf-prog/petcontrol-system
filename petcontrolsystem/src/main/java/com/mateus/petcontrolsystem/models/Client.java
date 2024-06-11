@@ -31,6 +31,9 @@ public class Client{
     private Address address;
     @OneToMany(mappedBy = "client")
     private List<Pet> pets = new ArrayList<>();
+
+    @OneToMany(mappedBy = "client")
+    private List<Order> orders = new ArrayList<>();
 //    private List<Agenda> appointments = new ArrayList<>();
-//    private List<Order> orders = new ArrayList<>();
+
 }
