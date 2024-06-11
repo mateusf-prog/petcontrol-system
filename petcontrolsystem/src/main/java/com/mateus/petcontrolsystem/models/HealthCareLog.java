@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
 @Entity
-@Table(name = "tb_health_care_logs")
+@Table(name = "tb_health_care_log")
 public class HealthCareLog {
 
     @Id
