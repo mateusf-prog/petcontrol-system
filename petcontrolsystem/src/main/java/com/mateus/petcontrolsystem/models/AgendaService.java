@@ -1,20 +1,40 @@
 package com.mateus.petcontrolsystem.models;
 
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.*;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
+@Entity
+@Table(name = "tb_agenda_service")
 public class AgendaService {
 
-    private BigDecimal price;
+    @EmbeddedId
+    private AgendaServicePK id;
 
-    private Agenda appointment;
-    private List<Service> services = new ArrayList<>();
+    public AgendaService(Agenda appointment,Service service) {
+        id.setService(service);
+        id.setAppointment(appointment);
+    }
+
+    public Service getService() {
+        return id.getService();
+    }
+
+    public void setService(Service service) {
+        id.setService(service);
+    }
+
+    public Agenda getAppointment() {
+        return id.getAppointment();
+    }
+
+    public void setAppointment(Agenda appointment) {
+        id.setAppointment(appointment);
+    }
 }
