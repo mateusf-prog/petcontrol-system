@@ -11,8 +11,8 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(of = "id", callSuper = false)
-@Entity()
+@EqualsAndHashCode(of = "id")
+@Entity
 @Table(name = "tb_clients")
 public class Client{
 
@@ -23,7 +23,6 @@ public class Client{
     private String cpf;
     private String email;
     private String phone;
-
     @Column(columnDefinition = "DATE")
     private LocalDate birthDate;
 
@@ -31,9 +30,9 @@ public class Client{
     private Address address;
     @OneToMany(mappedBy = "client")
     private List<Pet> pets = new ArrayList<>();
-
     @OneToMany(mappedBy = "client")
     private List<Order> orders = new ArrayList<>();
-//    private List<Agenda> appointments = new ArrayList<>();
+    @OneToMany(mappedBy = "client")
+    private List<Agenda> appointments = new ArrayList<>();
 
 }

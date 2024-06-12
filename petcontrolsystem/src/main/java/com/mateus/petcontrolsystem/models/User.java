@@ -9,8 +9,8 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
-@EqualsAndHashCode(of = "id", callSuper = false)
-@Entity()
+@EqualsAndHashCode(of = "id")
+@Entity
 @Table(name = "tb_users")
 public class User {
 

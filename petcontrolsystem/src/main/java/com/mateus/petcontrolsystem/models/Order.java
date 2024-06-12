@@ -23,8 +23,6 @@ public class Order {
     @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     private Instant date;
 
-    //private Log log;
-
     @ManyToOne
     @JoinColumn(name = "client_id")
     private Client client;

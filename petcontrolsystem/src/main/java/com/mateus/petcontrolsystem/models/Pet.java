@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-@Entity()
+@Entity
 @Table(name = "tb_pets")
 public class Pet {
 

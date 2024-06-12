@@ -21,10 +21,9 @@ public class Agenda {
     private Long id;
     private LocalDate date;
 
-    // todo falta o relacionamento - agenda, client, log
-//    private Log log;
-//    private Client client;
-
+    @ManyToOne
+    @JoinColumn(name = "client_id")
+    private Client client;
     @OneToMany(mappedBy = "id.appointment")
     private List<AgendaService> services = new ArrayList<>();
 
