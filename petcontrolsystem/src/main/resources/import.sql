@@ -22,10 +22,10 @@ INSERT INTO tb_pets(name, gender, type, weight, birth_date, description, client_
 INSERT INTO tb_pets(name, gender, type, weight, birth_date, description, client_id) VALUES ('Maya', 'FEMALE', 'DOG', 5.0, '2022-11-10', 'Cachorro apresenta otite', 1);
 INSERT INTO tb_pets(name, gender, type, weight, birth_date, description, client_id) VALUES ('Mavie', 'FEMALE', 'DOG', 7.0, '2021-08-20', 'Nenhuma observação', 3);
 
-INSERT INTO tb_health_care_log(application_date, pet_id, details, type) VALUES ('2024-07-24', 1, 'aplicação de vacina V8', 'VACCINE');
-INSERT INTO tb_health_care_log(application_date, pet_id, details, type) VALUES ('2024-08-24', 3, 'aplicação de vermífugo', 'VERMIFUGE');
-INSERT INTO tb_health_care_log(application_date, pet_id, details, type) VALUES ('2024-09-24', 2, 'aplicação de prevenção de pulgas', 'FLEAPREVENTION');
-INSERT INTO tb_health_care_log(application_date, pet_id, details, type) VALUES ('2024-10-24', 1, 'aplicação de vacina antirrábica', 'VACCINE');
+INSERT INTO tb_treatments(application_date, pet_id, details, type) VALUES ('2024-07-24', 1, 'aplicação de vacina V8', 'VACCINE');
+INSERT INTO tb_treatments(application_date, pet_id, details, type) VALUES ('2024-08-24', 3, 'aplicação de vermífugo', 'VERMIFUGE');
+INSERT INTO tb_treatments(application_date, pet_id, details, type) VALUES ('2024-09-24', 2, 'aplicação de prevenção de pulgas', 'FLEAPREVENTION');
+INSERT INTO tb_treatments(application_date, pet_id, details, type) VALUES ('2024-10-24', 1, 'aplicação de vacina antirrábica', 'VACCINE');
 
 INSERT INTO tb_orders(date, client_id) VALUES ('2024-05-15', 1);
 INSERT INTO tb_orders(date, client_id) VALUES ('2024-06-20', 1);
