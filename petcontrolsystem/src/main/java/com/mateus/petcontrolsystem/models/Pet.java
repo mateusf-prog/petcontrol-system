@@ -35,5 +35,5 @@ public class Pet {
     @ManyToOne
     private Client client;
     @OneToMany(mappedBy = "pet")
-    private List<HealthCareLog> treatments = new ArrayList<>();
+    private List<Treatment> treatments = new ArrayList<>();
 }

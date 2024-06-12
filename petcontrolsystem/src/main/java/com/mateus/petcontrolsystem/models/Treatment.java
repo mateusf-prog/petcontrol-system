@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @EqualsAndHashCode(of = "id")
 @Entity
 @Table(name = "tb_health_care_log")
-public class HealthCareLog {
+public class Treatment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
