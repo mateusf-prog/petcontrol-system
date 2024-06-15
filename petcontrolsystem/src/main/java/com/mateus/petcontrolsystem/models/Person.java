@@ -13,6 +13,7 @@ import java.time.LocalDate;
 public abstract class Person {
 
     private String name;
+    @Column(unique = true)
     private String email;
     private String phone;
     private String cpfCnpj;

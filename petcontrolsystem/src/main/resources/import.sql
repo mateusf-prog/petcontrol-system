@@ -1,6 +1,14 @@
+INSERT INTO tb_roles(authority) VALUES ('ROLE_ADMIN');
+INSERT INTO tb_roles(authority) VALUES ('ROLE_EMPLOYEE');
+
 INSERT INTO tb_users(name, email, phone, birth_date, password, cpf_cnpj) VALUES ('Mateus', 'mateus@email.com', '12991978003', '1997-12-15', 'passwordmateus', '11122233344');
 INSERT INTO tb_users(name, email, phone, birth_date, password, cpf_cnpj) VALUES ('João', 'joao@email.com', '11965985748', '2000-02-20', 'passwordjoao', '11122233344');
 INSERT INTO tb_users(name, email, phone, birth_date, password, cpf_cnpj) VALUES ('Maria', 'maria@email.com', '1284754165', '1985-05-29', 'passwordmaria', '11122233344');
+
+INSERT INTO tb_user_role(user_id, role_id) VALUES (1, 1);
+INSERT INTO tb_user_role(user_id, role_id) VALUES (1, 2);
+INSERT INTO tb_user_role(user_id, role_id) VALUES (2, 2);
+INSERT INTO tb_user_role(user_id, role_id) VALUES (3, 2);
 
 INSERT INTO tb_customers(name, email, phone, birth_date, cpf_cnpj) VALUES ('Carlos', 'carlos@email.com', '11912345678', '1980-06-15', '12345678901');
 INSERT INTO tb_customers(name, email, phone, birth_date, cpf_cnpj) VALUES ('Ana', 'ana@email.com', '11923456789', '1990-07-25', '23456789012');
