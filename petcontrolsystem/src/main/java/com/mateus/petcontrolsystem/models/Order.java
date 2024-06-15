@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -24,15 +23,15 @@ public class Order {
     private Instant date;
 
     @ManyToOne
-    @JoinColumn(name = "client_id")
-    private Client client;
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
     @OneToMany(mappedBy = "id.order")
     private Set<OrderItem> items = new HashSet<>();
 
-    public Order(Long id, Instant date, Client client) {
+    public Order(Long id, Instant date, Customer customer) {
         this.id = id;
         this.date = date;
-        this.client = client;
+        this.customer = customer;
     }
 
     public List<Product> getProducts() {

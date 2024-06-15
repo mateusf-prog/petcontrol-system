@@ -23,7 +23,7 @@ public class Agenda {
 
     @ManyToOne
     @JoinColumn(name = "client_id")
-    private Client client;
+    private Customer customer;
     @OneToMany(mappedBy = "id.appointment")
     private List<AgendaService> services = new ArrayList<>();
 

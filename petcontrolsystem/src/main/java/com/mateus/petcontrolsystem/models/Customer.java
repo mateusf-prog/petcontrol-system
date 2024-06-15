@@ -13,26 +13,20 @@ import java.util.List;
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
 @Entity
-@Table(name = "tb_clients")
-public class Client{
+@Table(name = "tb_customers")
+public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-    private String cpf;
-    private String email;
-    private String phone;
-    @Column(columnDefinition = "DATE")
-    private LocalDate birthDate;
-
-    @OneToOne
+    @Embedded
     private Address address;
-    @OneToMany(mappedBy = "client")
+
+    @OneToMany(mappedBy = "customer")
     private List<Pet> pets = new ArrayList<>();
-    @OneToMany(mappedBy = "client")
+    @OneToMany(mappedBy = "customer")
     private List<Order> orders = new ArrayList<>();
-    @OneToMany(mappedBy = "client")
+    @OneToMany(mappedBy = "customer")
     private List<Agenda> appointments = new ArrayList<>();
 
 }

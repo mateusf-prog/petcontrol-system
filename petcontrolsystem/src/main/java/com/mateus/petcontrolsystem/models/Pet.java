@@ -33,7 +33,7 @@ public class Pet {
     private Gender gender;
 
     @ManyToOne
-    private Client client;
+    private Customer customer;
     @OneToMany(mappedBy = "pet")
     private List<Treatment> treatments = new ArrayList<>();
 }
