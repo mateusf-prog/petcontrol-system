@@ -1,5 +1,9 @@
 package com.mateus.petcontrolsystem.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.mateus.petcontrolsystem.models.enums.AnimalType;
 import com.mateus.petcontrolsystem.models.enums.Gender;
 import jakarta.persistence.*;
@@ -33,6 +37,7 @@ public class Pet {
     private Gender gender;
 
     @ManyToOne
+    @JoinColumn(name = "customer_id")
     private Customer customer;
     @OneToMany(mappedBy = "pet")
     private List<Treatment> treatments = new ArrayList<>();

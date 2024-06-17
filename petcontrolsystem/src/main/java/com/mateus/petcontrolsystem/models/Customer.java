@@ -22,9 +22,9 @@ public class Customer extends Person {
     private Address address;
 
     @OneToMany(mappedBy = "customer")
-    private List<Pet> pets = new ArrayList<>();
-    @OneToMany(mappedBy = "customer")
     private List<Order> orders = new ArrayList<>();
+    @OneToMany(mappedBy = "customer")
+    private List<Pet> pets = new ArrayList<>();
     @OneToMany(mappedBy = "customer")
     private List<Agenda> appointments = new ArrayList<>();
 

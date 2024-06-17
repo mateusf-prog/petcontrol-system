@@ -8,7 +8,7 @@ import lombok.*;
 import java.math.BigDecimal;
 
 @NoArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(of = "id")
 @Getter
 @Setter
 @Entity
