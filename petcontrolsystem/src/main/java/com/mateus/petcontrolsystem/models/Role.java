@@ -6,7 +6,7 @@ import org.springframework.security.core.GrantedAuthority;
 
 @Getter
 @Setter
-@EqualsAndHashCode(of = "authority")
+@EqualsAndHashCode(of = "roles")
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -16,10 +16,10 @@ public class Role implements GrantedAuthority {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String authority;
+    private String roles;
 
     @Override
     public String getAuthority() {
-        return authority;
+        return roles;
     }
 }
