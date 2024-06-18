@@ -10,7 +10,7 @@ import lombok.*;
 @Embeddable
 public class Address {
 
-    private Integer cep;
+    private Integer zipCode;
     private String street;
     private Integer number;
     private String district;

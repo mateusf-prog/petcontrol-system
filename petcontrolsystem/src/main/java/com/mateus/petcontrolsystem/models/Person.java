@@ -16,6 +16,7 @@ public abstract class Person {
     @Column(unique = true)
     private String email;
     private String phone;
+    @Column(unique = true)
     private String cpfCnpj;
     @Column(columnDefinition = "DATE")
     private LocalDate birthDate;

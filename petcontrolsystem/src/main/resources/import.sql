@@ -1,18 +1,11 @@
-INSERT INTO tb_roles(authority) VALUES ('ROLE_ADMIN');
-INSERT INTO tb_roles(authority) VALUES ('ROLE_EMPLOYEE');
 
-INSERT INTO tb_users(name, email, phone, birth_date, password, cpf_cnpj) VALUES ('Mateus', 'mateus@email.com', '12991978003', '1997-12-15', '123456', '11122233344');
-INSERT INTO tb_users(name, email, phone, birth_date, password, cpf_cnpj) VALUES ('João', 'joao@email.com', '11965985748', '2000-02-20', '123456', '11122233344');
-INSERT INTO tb_users(name, email, phone, birth_date, password, cpf_cnpj) VALUES ('Maria', 'maria@email.com', '1284754165', '1985-05-29', '123456', '11122233344');
+INSERT INTO tb_users(name, email, phone, birth_date, password, cpf_cnpj, zip_code, street, number, district, city, uf) VALUES ('Mateus', 'mateus@email.com', '12991978003', '1997-12-15', '123456', '19573556485', 12212700, 'Rua das Flores', 123, 'Centro', 'São José dos Campos', 'SP');
+INSERT INTO tb_users(name, email, phone, birth_date, password, cpf_cnpj, zip_code, street, number, district, city, uf) VALUES ('João', 'joao@email.com', '11965985748', '2000-02-20', '123456', '73545687956', 35748000, 'Rua das Palmeiras', 456, 'Centro', 'São Paulo', 'SP');
+INSERT INTO tb_users(name, email, phone, birth_date, password, cpf_cnpj, zip_code, street, number, district, city, uf) VALUES ('Maria', 'maria@email.com', '1284754165', '1985-05-29', '123456', '32198765452', 12345678, 'Rua das Avenidas', 789, 'Centro', 'São Bernardo do Campo', 'SP');
 
-INSERT INTO tb_user_role(user_id, role_id) VALUES (1, 1);
-INSERT INTO tb_user_role(user_id, role_id) VALUES (1, 2);
-INSERT INTO tb_user_role(user_id, role_id) VALUES (2, 2);
-INSERT INTO tb_user_role(user_id, role_id) VALUES (3, 2);
-
-INSERT INTO tb_customers(name, email, phone, birth_date, cpf_cnpj) VALUES ('Carlos', 'carlos@email.com', '11912345678', '1980-06-15', '12345678901');
-INSERT INTO tb_customers(name, email, phone, birth_date, cpf_cnpj) VALUES ('Ana', 'ana@email.com', '11923456789', '1990-07-25', '23456789012');
-INSERT INTO tb_customers(name, email, phone, birth_date, cpf_cnpj) VALUES ('Pedro', 'pedro@email.com', '11934567890', '2000-08-05', '34567890123');
+INSERT INTO tb_customers(name, email, phone, birth_date, cpf_cnpj, zip_code, street, number, district, city, uf) VALUES ('Carlos', 'carlos@email.com', '11912345678', '1980-06-15', '974646546413', 12212700, 'Rua das Flores', 123, 'Centro', 'São José dos Campos', 'SP');
+INSERT INTO tb_customers(name, email, phone, birth_date, cpf_cnpj, zip_code, street, number, district, city, uf) VALUES ('Ana', 'ana@email.com', '11923456789', '1990-07-25', '64654649987', 35748000, 'Rua das Palmeiras', 456, 'Centro', 'Campinas', 'SP');
+INSERT INTO tb_customers(name, email, phone, birth_date, cpf_cnpj, zip_code, street, number, district, city, uf) VALUES ('Pedro', 'pedro@email.com', '11934567890', '2000-08-05', '65432198745', 12345678, 'Rua das Avenidas', 789, 'Centro', 'Paraisópolis', 'SP');
 
 INSERT INTO tb_products(name, category, supplier, price, stock, description) VALUES ('Coleira', 'ACCESSORY', 'empresa1', 30.00, 50, 'Coleira simples colorida');
 INSERT INTO tb_products(name, category, supplier, price, stock, description) VALUES ('Vacina Antirábica', 'VACCINE', 'Labovet', 60.00, 40, 'vacina de raiva para pets');
