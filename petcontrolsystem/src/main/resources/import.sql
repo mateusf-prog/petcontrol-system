@@ -1,9 +1,9 @@
 INSERT INTO tb_roles(authority) VALUES ('ROLE_ADMIN');
 INSERT INTO tb_roles(authority) VALUES ('ROLE_EMPLOYEE');
 
-INSERT INTO tb_users(name, email, phone, birth_date, password, cpf_cnpj) VALUES ('Mateus', 'mateus@email.com', '12991978003', '1997-12-15', '$2a$10$I/3bI1EHYfxKmza6A/cekus5Q1SZz.c9WRPGI6aXlFWxFhTYOTKPy', '11122233344');
-INSERT INTO tb_users(name, email, phone, birth_date, password, cpf_cnpj) VALUES ('João', 'joao@email.com', '11965985748', '2000-02-20', '$2a$10$I/3bI1EHYfxKmza6A/cekus5Q1SZz.c9WRPGI6aXlFWxFhTYOTKPy', '11122233344');
-INSERT INTO tb_users(name, email, phone, birth_date, password, cpf_cnpj) VALUES ('Maria', 'maria@email.com', '1284754165', '1985-05-29', '$2a$10$I/3bI1EHYfxKmza6A/cekus5Q1SZz.c9WRPGI6aXlFWxFhTYOTKPy', '11122233344');
+INSERT INTO tb_users(name, email, phone, birth_date, password, cpf_cnpj) VALUES ('Mateus', 'mateus@email.com', '12991978003', '1997-12-15', '123456', '11122233344');
+INSERT INTO tb_users(name, email, phone, birth_date, password, cpf_cnpj) VALUES ('João', 'joao@email.com', '11965985748', '2000-02-20', '123456', '11122233344');
+INSERT INTO tb_users(name, email, phone, birth_date, password, cpf_cnpj) VALUES ('Maria', 'maria@email.com', '1284754165', '1985-05-29', '123456', '11122233344');
 
 INSERT INTO tb_user_role(user_id, role_id) VALUES (1, 1);
 INSERT INTO tb_user_role(user_id, role_id) VALUES (1, 2);
