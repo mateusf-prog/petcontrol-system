@@ -1,6 +1,7 @@
 package com.mateus.petcontrolsystem.controllers.handlers;
 
 import com.mateus.petcontrolsystem.dto.StandardError;
+import com.mateus.petcontrolsystem.services.exceptions.EntityAlreadyExistsException;
 import com.mateus.petcontrolsystem.services.exceptions.InvalidPasswordException;
 import com.mateus.petcontrolsystem.services.exceptions.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,6 +25,13 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(InvalidPasswordException.class)
     public ResponseEntity<StandardError> invalidPassword(InvalidPasswordException e, HttpServletRequest request) {
         HttpStatus status = HttpStatus.UNAUTHORIZED;
+        StandardError err = new StandardError(Instant.now(), status.value(), e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(status).body(err);
+    }
+
+    @ExceptionHandler(EntityAlreadyExistsException.class)
+    public ResponseEntity<StandardError> invalidPassword(EntityAlreadyExistsException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.CONFLICT;
         StandardError err = new StandardError(Instant.now(), status.value(), e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(status).body(err);
     }
