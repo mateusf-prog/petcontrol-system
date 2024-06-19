@@ -3,7 +3,7 @@ package com.mateus.petcontrolsystem.models;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +19,7 @@ public class Agenda {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private LocalDate date;
+    private LocalDateTime date;
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
@@ -30,6 +30,4 @@ public class Agenda {
     public List<Service> getServices() {
         return services.stream().map(AgendaService::getService).toList();
     }
-
-
 }

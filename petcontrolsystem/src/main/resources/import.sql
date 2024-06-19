@@ -21,6 +21,22 @@ INSERT INTO tb_treatments(application_date, pet_id, details, type) VALUES ('2024
 INSERT INTO tb_treatments(application_date, pet_id, details, type) VALUES ('2024-09-24', 2, 'aplicação de prevenção de pulgas', 'FLEAPREVENTION');
 INSERT INTO tb_treatments(application_date, pet_id, details, type) VALUES ('2024-10-24', 1, 'aplicação de vacina antirrábica', 'VACCINE');
 
+INSERT INTO tb_services (name, small_dog_price, medium_size_dog_price, big_dog_price) VALUES ('Tosa Higiênica', 50.00, 60.00, 70.00);
+INSERT INTO tb_services (name, small_dog_price, medium_size_dog_price, big_dog_price) VALUES ('Tosa Tesoura', 80.00, 90.00, 100.00);
+INSERT INTO tb_services (name, small_dog_price, medium_size_dog_price, big_dog_price) VALUES ('Tosa Máquina', 120.00, 150.00, 180.00);
+INSERT INTO tb_services (name, small_dog_price, medium_size_dog_price, big_dog_price) VALUES ('Táxi Dog', 30.00, 40.00, 50.00);
+
+INSERT INTO tb_agenda (date, customer_id) VALUES ('2024-06-20 10:00:00', 1);
+INSERT INTO tb_agenda (date, customer_id) VALUES ('2024-06-21 14:00:00', 2);
+INSERT INTO tb_agenda (date, customer_id) VALUES ('2024-06-22 16:00:00', 3);
+
+INSERT INTO tb_agenda_service (appointment_id, service_id) VALUES (1, 1);
+INSERT INTO tb_agenda_service (appointment_id, service_id) VALUES (1, 4);
+INSERT INTO tb_agenda_service (appointment_id, service_id) VALUES (2, 3);
+INSERT INTO tb_agenda_service (appointment_id, service_id) VALUES (2, 2);
+INSERT INTO tb_agenda_service (appointment_id, service_id) VALUES (3, 1);
+INSERT INTO tb_agenda_service (appointment_id, service_id) VALUES (3, 4);
+
 INSERT INTO tb_orders(date, customer_id) VALUES ('2024-05-15', 1);
 INSERT INTO tb_orders(date, customer_id) VALUES ('2024-06-20', 1);
 INSERT INTO tb_orders(date, customer_id) VALUES ('2024-04-21', 2);
