@@ -2,6 +2,11 @@ package com.mateus.petcontrolsystem.models;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.List;
 
 @Getter
 @Setter
@@ -17,6 +22,5 @@ public class User extends Person {
     private String password;
     @Embedded
     private Address address;
-
 
 }
