@@ -2,6 +2,7 @@ package com.mateus.petcontrolsystem.infra.security;
 
 import com.mateus.petcontrolsystem.models.User;
 import com.mateus.petcontrolsystem.repositories.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,7 +30,7 @@ public class SecurityFilter extends OncePerRequestFilter {
         var login = tokenService.validateToken(token);
 
         if (login != null) {
-            User user = userRepository.findByEmail(login).orElseThrow(() -> new RuntimeException("USER NOT FOUND")); //todo: custom exception
+            User user = userRepository.findByEmail(login).orElseThrow(() -> new EntityNotFoundException("USER NOT FOUND"));
             var authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
             var authentication = new UsernamePasswordAuthenticationToken(user, null, authorities);
             SecurityContextHolder.getContext().setAuthentication(authentication);
