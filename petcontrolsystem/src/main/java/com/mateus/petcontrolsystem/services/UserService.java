@@ -1,11 +1,9 @@
 package com.mateus.petcontrolsystem.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mateus.petcontrolsystem.dto.LoginRequestDTO;
-import com.mateus.petcontrolsystem.dto.LoginResponseDTO;
-import com.mateus.petcontrolsystem.dto.RegisterRequestDTO;
-import com.mateus.petcontrolsystem.dto.RegisterResponseDTO;
+import com.mateus.petcontrolsystem.dto.*;
 import com.mateus.petcontrolsystem.infra.security.TokenService;
+import com.mateus.petcontrolsystem.models.Address;
 import com.mateus.petcontrolsystem.models.User;
 import com.mateus.petcontrolsystem.repositories.UserRepository;
 import com.mateus.petcontrolsystem.services.exceptions.EntityAlreadyExistsException;
@@ -14,9 +12,7 @@ import com.mateus.petcontrolsystem.services.exceptions.ResourceNotFoundException
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,16 +23,18 @@ public class UserService {
     private final TokenService tokenService;
     private final PasswordEncoder passwordEncoder;
 
-    public LoginResponseDTO login(LoginRequestDTO dto) {
-        User user = repository.findByEmail(dto.email()).orElseThrow(
+    @Transactional(readOnly = true)
+    public LoginResponseDTO login(LoginRequestDTO body) {
+        User user = repository.findByEmail(body.email()).orElseThrow(
                 () -> new ResourceNotFoundException("USER NOT FOUND"));
 
-        if (!passwordEncoder.matches(dto.password(), user.getPassword())) {
+        if (!passwordEncoder.matches(body.password(), user.getPassword())) {
             throw new InvalidPasswordException("INVALID PASSWORD");
         }
         return new LoginResponseDTO(user.getName(), tokenService.generateToken(user));
     }
 
+    @Transactional
     public RegisterResponseDTO register(RegisterRequestDTO body) {
 
         User user = repository.findByEmailOrCpfCnpj(body.email(), body.cpfCnpj());
@@ -55,5 +53,17 @@ public class UserService {
         String token = tokenService.generateToken(newUser);
 
         return new RegisterResponseDTO(newUser.getName(), token);
+    }
+
+    @Transactional
+    public UserUpdateDTO update(UserUpdateDTO body) {
+
+        User user = repository.findByCpfCnpj(body.cpfCnpj());
+        user.setName(body.name());
+        user.setPhone(body.phone());
+        user.setAddress(mapper.convertValue(body.address(), Address.class));
+
+        repository.save(user);
+        return mapper.convertValue(user, UserUpdateDTO.class);
     }
 }
