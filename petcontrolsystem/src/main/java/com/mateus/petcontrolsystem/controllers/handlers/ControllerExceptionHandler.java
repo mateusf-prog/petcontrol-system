@@ -1,6 +1,7 @@
 package com.mateus.petcontrolsystem.controllers.handlers;
 
 import com.mateus.petcontrolsystem.dto.StandardError;
+import com.mateus.petcontrolsystem.infra.exceptions.TokenCreationException;
 import com.mateus.petcontrolsystem.services.exceptions.EntityAlreadyExistsException;
 import com.mateus.petcontrolsystem.services.exceptions.InvalidPasswordException;
 import com.mateus.petcontrolsystem.services.exceptions.ResourceNotFoundException;
@@ -30,8 +31,15 @@ public class ControllerExceptionHandler {
     }
 
     @ExceptionHandler(EntityAlreadyExistsException.class)
-    public ResponseEntity<StandardError> invalidPassword(EntityAlreadyExistsException e, HttpServletRequest request) {
+    public ResponseEntity<StandardError> entityExists(EntityAlreadyExistsException e, HttpServletRequest request) {
         HttpStatus status = HttpStatus.CONFLICT;
+        StandardError err = new StandardError(Instant.now(), status.value(), e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(status).body(err);
+    }
+
+    @ExceptionHandler(TokenCreationException.class)
+    public ResponseEntity<StandardError> creationTokenException(TokenCreationException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
         StandardError err = new StandardError(Instant.now(), status.value(), e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(status).body(err);
     }
