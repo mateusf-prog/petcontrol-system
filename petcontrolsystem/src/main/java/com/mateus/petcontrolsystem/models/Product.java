@@ -24,6 +24,7 @@ public class Product {
     private String name;
     private String supplier;
     private BigDecimal price;
+    @Column(columnDefinition = "TEXT")
     private String description;
     private Integer stock;
     @Enumerated(EnumType.STRING)

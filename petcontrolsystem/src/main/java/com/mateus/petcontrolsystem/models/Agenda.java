@@ -19,6 +19,7 @@ public class Agenda {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(unique = true, columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     private LocalDateTime date;
 
     @ManyToOne

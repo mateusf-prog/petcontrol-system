@@ -7,5 +7,6 @@ public enum Category {
     ACCESSORY,
     PHARMACY,
     BEAUTY,
-    CLEANING;
+    CLEANING,
+    OTHER
 }

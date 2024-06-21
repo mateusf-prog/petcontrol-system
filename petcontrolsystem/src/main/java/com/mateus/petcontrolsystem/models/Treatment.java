@@ -18,7 +18,9 @@ public class Treatment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     private LocalDate applicationDate;
+    @Column(columnDefinition = "TEXT")
     private String details;
 
     @Enumerated(EnumType.STRING)

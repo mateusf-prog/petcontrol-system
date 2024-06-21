@@ -1,5 +1,6 @@
 package com.mateus.petcontrolsystem.models;
 
+import com.mateus.petcontrolsystem.models.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,5 +23,7 @@ public class User extends Person {
     private String password;
     @Embedded
     private Address address;
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
 
 }

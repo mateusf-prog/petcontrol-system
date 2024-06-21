@@ -4,5 +4,6 @@ public enum TreatmentType {
 
     VERMIFUGE,
     FLEAPREVENTION,
-    VACCINE;
+    VACCINE,
+    OTHER;
 }
