@@ -1,29 +1,11 @@
 package com.mateus.petcontrolsystem.dto;
 
-import com.mateus.petcontrolsystem.models.Address;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+public record AddressDTO (
+    String zipCode,
+    String street,
+    String number,
+    String district,
+    String city,
+    String uf
+    ) {}
 
-@Getter
-@Setter
-@NoArgsConstructor
-public class AddressDTO {
-
-    private String zipCode;
-    private String street;
-    private String number;
-    private String district;
-    private String city;
-    private String uf;
-
-    public AddressDTO(Address entity) {
-        this.zipCode = entity.getZipCode();
-        this.street = entity.getStreet();
-        this.number = entity.getNumber();
-        this.district = entity.getDistrict();
-        this.city = entity.getCity();
-        this.uf = entity.getUf();
-    }
-
-}
