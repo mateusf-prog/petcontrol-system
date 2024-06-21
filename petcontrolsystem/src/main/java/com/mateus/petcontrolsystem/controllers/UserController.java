@@ -2,6 +2,8 @@ package com.mateus.petcontrolsystem.controllers;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.mateus.petcontrolsystem.dto.UpdateUserDTO;
+import com.mateus.petcontrolsystem.dto.UserAccessDataRequestDTO;
+import com.mateus.petcontrolsystem.dto.UserAccessDataResponseDTO;
 import com.mateus.petcontrolsystem.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,5 +20,12 @@ public class UserController {
     public ResponseEntity<UpdateUserDTO> update(@RequestBody UpdateUserDTO body, @PathVariable Long id) throws JsonMappingException {
         body = service.update(body, id);
         return ResponseEntity.ok(body);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<UserAccessDataResponseDTO> updateAccessData(
+            @RequestBody UserAccessDataRequestDTO body, @PathVariable Long id) {
+        UserAccessDataResponseDTO entity = service.updateAccessData(body, id);
+        return ResponseEntity.ok(entity);
     }
 }

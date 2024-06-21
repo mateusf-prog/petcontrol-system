@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -25,7 +26,6 @@ public class UserService {
     private final ObjectMapper mapper;
     private final TokenService tokenService;
     private final PasswordEncoder passwordEncoder;
-
 
     @Transactional(readOnly = true)
     public LoginResponseDTO login(LoginRequestDTO body) {
@@ -68,5 +68,27 @@ public class UserService {
         mapper.updateValue(existingUser, body);
         repository.save(existingUser);
         return mapper.convertValue(existingUser, UpdateUserDTO.class);
+    }
+
+    @Transactional
+    public UserAccessDataResponseDTO updateAccessData(UserAccessDataRequestDTO body, Long id) {
+
+        List<User> allUsers = repository.findAll();
+        Optional<User> checkUserByEmail = allUsers.stream().filter(user -> user.getEmail().equals(body.email())).findFirst();
+        if (checkUserByEmail.isPresent() && !checkUserByEmail.get().getId().equals(id)) {
+            throw new EntityAlreadyExistsException("EMAIL ALREADY IN USE");
+        }
+
+        Optional<User> optionalUser = repository.findById(id);
+        if (optionalUser.isEmpty()) throw new EntityNotFoundException("ENTITY NOT FOUND");
+
+        User user = optionalUser.get();
+        if (!passwordEncoder.matches(body.actualPassword(), user.getPassword()))
+            throw new InvalidPasswordException("OLD PASSWORD INVALID");
+
+        user.setEmail(body.email());
+        user.setPassword(passwordEncoder.encode(body.newPassword()));
+        repository.save(user);
+        return mapper.convertValue(user, UserAccessDataResponseDTO.class);
     }
 }
