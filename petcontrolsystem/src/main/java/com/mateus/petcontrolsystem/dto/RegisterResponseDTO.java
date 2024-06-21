@@ -1,5 +1,4 @@
 package com.mateus.petcontrolsystem.dto;
 
-public record RegisterResponseDTO(
-        String name, String token) {
+public record RegisterResponseDTO(Long id, String name, String token) {
 }
