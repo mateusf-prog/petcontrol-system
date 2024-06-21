@@ -1,5 +1,6 @@
 package com.mateus.petcontrolsystem.controllers.handlers;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.mateus.petcontrolsystem.dto.StandardError;
 import com.mateus.petcontrolsystem.infra.exceptions.TokenCreationException;
 import com.mateus.petcontrolsystem.services.exceptions.EntityAlreadyExistsException;
@@ -50,5 +51,12 @@ public class ControllerExceptionHandler {
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
         StandardError err = new StandardError(Instant.now(), status.value(), e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(status).body(err);
+    }
+
+    @ExceptionHandler(JsonMappingException.class)
+    public ResponseEntity<StandardError> jsonMappingException (JsonMappingException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        StandardError err = new StandardError(Instant.now(), status.value(), e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(status.value()).body(err);
     }
 }

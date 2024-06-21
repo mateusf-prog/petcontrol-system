@@ -1,18 +1,21 @@
 package com.mateus.petcontrolsystem.services;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mateus.petcontrolsystem.dto.*;
 import com.mateus.petcontrolsystem.infra.security.TokenService;
-import com.mateus.petcontrolsystem.models.Address;
 import com.mateus.petcontrolsystem.models.User;
 import com.mateus.petcontrolsystem.repositories.UserRepository;
 import com.mateus.petcontrolsystem.services.exceptions.EntityAlreadyExistsException;
 import com.mateus.petcontrolsystem.services.exceptions.InvalidPasswordException;
 import com.mateus.petcontrolsystem.services.exceptions.ResourceNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +25,7 @@ public class UserService {
     private final ObjectMapper mapper;
     private final TokenService tokenService;
     private final PasswordEncoder passwordEncoder;
+
 
     @Transactional(readOnly = true)
     public LoginResponseDTO login(LoginRequestDTO body) {
@@ -42,28 +46,27 @@ public class UserService {
             if (user.getEmail().equals(body.email())) {
                 throw new EntityAlreadyExistsException("USER ALREADY EXISTS BY EMAIL");
             }
-            if (user.getCpfCnpj().equals(body.cpfCnpj())) {
+            if (user.getCpfCnpj().equals(body.cpfCnpj()))
                 throw new EntityAlreadyExistsException("USER ALREADY EXISTS BY CPF/CNPJ");
-            }
         }
 
         User newUser = mapper.convertValue(body, User.class);
         newUser.setPassword(passwordEncoder.encode(body.password()));
-        repository.save(newUser);
+        newUser = repository.save(newUser);
         String token = tokenService.generateToken(newUser);
 
-        return new RegisterResponseDTO(newUser.getName(), token);
+        return new RegisterResponseDTO(newUser.getId(), newUser.getName(), token);
     }
 
     @Transactional
-    public UserUpdateDTO update(UserUpdateDTO body) {
+    public UpdateUserDTO update(UpdateUserDTO body, Long id) throws JsonMappingException {
 
-        User user = repository.findByCpfCnpj(body.cpfCnpj());
-        user.setName(body.name());
-        user.setPhone(body.phone());
-        user.setAddress(mapper.convertValue(body.address(), Address.class));
+        Optional<User> optionalUser = repository.findById(id);
+        if (optionalUser.isEmpty()) throw new EntityNotFoundException("ENTITY NOT FOUND");
 
-        repository.save(user);
-        return mapper.convertValue(user, UserUpdateDTO.class);
+        User existingUser = optionalUser.get();
+        mapper.updateValue(existingUser, body);
+        repository.save(existingUser);
+        return mapper.convertValue(existingUser, UpdateUserDTO.class);
     }
 }
