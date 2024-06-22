@@ -40,9 +40,9 @@ public class AuthController {
     }
 
     @PostMapping("/confirmCode")
-    public ResponseEntity<Void> checkCodeToRecoverPassword(@RequestBody EmailCodeToRecoveryPasswordDTO body) {
-        userService.checkCodeToRecoverPassword(body);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<String> checkCodeToRecoverPassword(@RequestBody EmailCodeToRecoveryPasswordDTO body) {
+        String token = userService.checkCodeToRecoverPassword(body);
+        return ResponseEntity.ok().body(token);
     }
 
     @PostMapping("/setNewPassword")

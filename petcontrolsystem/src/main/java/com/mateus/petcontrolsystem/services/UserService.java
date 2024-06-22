@@ -3,6 +3,7 @@ package com.mateus.petcontrolsystem.services;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mateus.petcontrolsystem.dto.*;
+import com.mateus.petcontrolsystem.infra.exceptions.InvalidTokenException;
 import com.mateus.petcontrolsystem.infra.security.TokenService;
 import com.mateus.petcontrolsystem.models.User;
 import com.mateus.petcontrolsystem.repositories.UserRepository;
@@ -101,14 +102,27 @@ public class UserService {
         // todo: Here should be code for sent email code to recovery password
     }
 
-    public void checkCodeToRecoverPassword(EmailCodeToRecoveryPasswordDTO body) {
+    public String checkCodeToRecoverPassword(EmailCodeToRecoveryPasswordDTO body) {
 
-        // todo: Here should be code for check email code to recovery password
+        // todo: Retrieve the user
+        User user = repository.findByEmail(body.email()).orElseThrow(
+                () -> new EntityNotFoundException("USER NOT FOUND"));
+
+        // todo: check the recovery code
+
+        // todo: If the code is valid, generate a temporary token and return them
+        String token = tokenService.generateTemporaryTokenToRecoveryPassword(user);
+
+        return null;
     }
 
     @Transactional
     public EmailToRecoverPasswordDTO setNewPassword(NewPasswordToRecoveryAccount body) {
 
+        String email = tokenService.validateToken(body.token());
+        if (email == null) throw new InvalidTokenException("INVALID TOKEN");
+
+        // if token is valid...
         User user = repository.findByEmail(body.email()).orElseThrow(
                 () -> new EntityNotFoundException("USER NOT FOUND"));
 

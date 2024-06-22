@@ -34,6 +34,20 @@ public class TokenService {
         }
     }
 
+    public String generateTemporaryTokenToRecoveryPassword (User user) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(secret);
+            String token = JWT.create()
+                    .withIssuer("login-auth-api")
+                    .withSubject(user.getEmail())
+                    .withExpiresAt(LocalDateTime.now().plusMinutes(15).toInstant(ZoneOffset.of("-3")))
+                    .sign(algorithm);
+            return token;
+        } catch (JWTCreationException e) {
+            throw new TokenCreationException("ERROR WHILE CREATE TOKEN");
+        }
+    }
+
     public Instant generateExpirationDate() {
         return LocalDateTime.now().plusHours(12).toInstant(ZoneOffset.of("-3"));
     }
