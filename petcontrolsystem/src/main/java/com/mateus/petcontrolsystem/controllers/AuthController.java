@@ -1,9 +1,6 @@
 package com.mateus.petcontrolsystem.controllers;
 
-import com.mateus.petcontrolsystem.dto.LoginRequestDTO;
-import com.mateus.petcontrolsystem.dto.LoginResponseDTO;
-import com.mateus.petcontrolsystem.dto.RegisterRequestDTO;
-import com.mateus.petcontrolsystem.dto.RegisterResponseDTO;
+import com.mateus.petcontrolsystem.dto.*;
 import com.mateus.petcontrolsystem.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -34,5 +31,23 @@ public class AuthController {
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(response.id()).toUri();
         return ResponseEntity.created(uri).body(response);
+    }
+
+    @PostMapping("/passwordRecovery")
+    public ResponseEntity<Void> checkEmailExistsToRecoveryPassword(@RequestBody EmailToRecoverPasswordDTO body) {
+        userService.checkEmailExistsToRecoveryPassword(body);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/confirmCode")
+    public ResponseEntity<Void> checkCodeToRecoverPassword(@RequestBody EmailCodeToRecoveryPasswordDTO body) {
+        userService.checkCodeToRecoverPassword(body);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/setNewPassword")
+    public ResponseEntity<EmailToRecoverPasswordDTO> setNewPassword(@RequestBody NewPasswordToRecoveryAccount body) {
+        EmailToRecoverPasswordDTO result = userService.setNewPassword(body);
+        return ResponseEntity.ok().body(result);
     }
 }

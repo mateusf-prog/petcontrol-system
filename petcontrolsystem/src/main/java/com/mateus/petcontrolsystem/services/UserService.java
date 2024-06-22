@@ -91,4 +91,29 @@ public class UserService {
         repository.save(user);
         return mapper.convertValue(user, UserAccessDataResponseDTO.class);
     }
+
+    @Transactional(readOnly = true)
+    public void checkEmailExistsToRecoveryPassword(EmailToRecoverPasswordDTO body) {
+
+        User entity = repository.findByEmail(body.email()).orElseThrow(
+                () -> new EntityNotFoundException("USER NOT FOUND"));
+
+        // todo: Here should be code for sent email code to recovery password
+    }
+
+    public void checkCodeToRecoverPassword(EmailCodeToRecoveryPasswordDTO body) {
+
+        // todo: Here should be code for check email code to recovery password
+    }
+
+    @Transactional
+    public EmailToRecoverPasswordDTO setNewPassword(NewPasswordToRecoveryAccount body) {
+
+        User user = repository.findByEmail(body.email()).orElseThrow(
+                () -> new EntityNotFoundException("USER NOT FOUND"));
+
+        user.setPassword(passwordEncoder.encode(body.newPassword()));
+        repository.save(user);
+        return new EmailToRecoverPasswordDTO(user.getEmail());
+    }
 }
