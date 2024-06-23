@@ -1,6 +1,11 @@
 package com.mateus.petcontrolsystem.controllers;
 
 import com.mateus.petcontrolsystem.dto.*;
+import com.mateus.petcontrolsystem.dto.password.CodeReceivedEmailResponseDTO;
+import com.mateus.petcontrolsystem.dto.password.CodeReceivedInEmailRequestDTO;
+import com.mateus.petcontrolsystem.dto.password.EmailToRecoverPasswordDTO;
+import com.mateus.petcontrolsystem.dto.password.NewPasswordToRecoveryAccount;
+import com.mateus.petcontrolsystem.services.PasswordRecoveryService;
 import com.mateus.petcontrolsystem.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +23,7 @@ import java.net.URI;
 public class AuthController {
 
     private final UserService userService;
+    private final PasswordRecoveryService recoveryPasswordService;
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO body) {
@@ -33,21 +39,21 @@ public class AuthController {
         return ResponseEntity.created(uri).body(response);
     }
 
-    @PostMapping("/passwordRecovery")
-    public ResponseEntity<Void> checkEmailExistsToRecoveryPassword(@RequestBody EmailToRecoverPasswordDTO body) {
-        userService.checkEmailExistsToRecoveryPassword(body);
+    @PostMapping("/passwordRecover")
+    public ResponseEntity<Void> sendCodeToEmail(@RequestBody EmailToRecoverPasswordDTO body) {
+        recoveryPasswordService.sendCodeToEmail(body);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/confirmCode")
-    public ResponseEntity<String> checkCodeToRecoverPassword(@RequestBody EmailCodeToRecoveryPasswordDTO body) {
-        String token = userService.checkCodeToRecoverPassword(body);
+    public ResponseEntity<CodeReceivedEmailResponseDTO> validateCodeReceivedInEmail(@RequestBody CodeReceivedInEmailRequestDTO body) {
+        CodeReceivedEmailResponseDTO token = recoveryPasswordService.validateCodeReceivedInEmail(body);
         return ResponseEntity.ok().body(token);
     }
 
     @PostMapping("/setNewPassword")
     public ResponseEntity<EmailToRecoverPasswordDTO> setNewPassword(@RequestBody NewPasswordToRecoveryAccount body) {
-        EmailToRecoverPasswordDTO result = userService.setNewPassword(body);
+        EmailToRecoverPasswordDTO result = recoveryPasswordService.setNewUserPassword(body);
         return ResponseEntity.ok().body(result);
     }
 }

@@ -3,13 +3,10 @@ package com.mateus.petcontrolsystem.services;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mateus.petcontrolsystem.dto.*;
-import com.mateus.petcontrolsystem.infra.exceptions.InvalidTokenException;
 import com.mateus.petcontrolsystem.infra.security.TokenService;
 import com.mateus.petcontrolsystem.models.User;
 import com.mateus.petcontrolsystem.repositories.UserRepository;
-import com.mateus.petcontrolsystem.services.exceptions.EntityAlreadyExistsException;
-import com.mateus.petcontrolsystem.services.exceptions.InvalidPasswordException;
-import com.mateus.petcontrolsystem.services.exceptions.ResourceNotFoundException;
+import com.mateus.petcontrolsystem.services.exceptions.*;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -91,43 +88,5 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(body.newPassword()));
         repository.save(user);
         return mapper.convertValue(user, UserAccessDataResponseDTO.class);
-    }
-
-    @Transactional(readOnly = true)
-    public void checkEmailExistsToRecoveryPassword(EmailToRecoverPasswordDTO body) {
-
-        User entity = repository.findByEmail(body.email()).orElseThrow(
-                () -> new EntityNotFoundException("USER NOT FOUND"));
-
-        // todo: Here should be code for sent email code to recovery password
-    }
-
-    public String checkCodeToRecoverPassword(EmailCodeToRecoveryPasswordDTO body) {
-
-        // todo: Retrieve the user
-        User user = repository.findByEmail(body.email()).orElseThrow(
-                () -> new EntityNotFoundException("USER NOT FOUND"));
-
-        // todo: check the recovery code
-
-        // todo: If the code is valid, generate a temporary token and return them
-        String token = tokenService.generateTemporaryTokenToRecoveryPassword(user);
-
-        return null;
-    }
-
-    @Transactional
-    public EmailToRecoverPasswordDTO setNewPassword(NewPasswordToRecoveryAccount body) {
-
-        String email = tokenService.validateToken(body.token());
-        if (email == null) throw new InvalidTokenException("INVALID TOKEN");
-
-        // if token is valid...
-        User user = repository.findByEmail(body.email()).orElseThrow(
-                () -> new EntityNotFoundException("USER NOT FOUND"));
-
-        user.setPassword(passwordEncoder.encode(body.newPassword()));
-        repository.save(user);
-        return new EmailToRecoverPasswordDTO(user.getEmail());
     }
 }
