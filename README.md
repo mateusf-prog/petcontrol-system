@@ -78,7 +78,7 @@ Para rodar o projeto em sua máquina há duas formas:
  ```bash
 git clone https://github.com/mateusf-prog/petcontrol-system.git.
 ```
-Depois de clonado, abra sua IDE e execute o arquivo neste diretório:
+Depois de clonado, abra sua IDE e execute o arquivo "PetcontrolsystemApplication.java" neste diretório:
 ```java
 src/main/java/com/mateus/petcontrolsystem/PetcontrolsystemApplication.java
 ```
