@@ -13,7 +13,7 @@ Abaixo, algumas telas de como ficará o projeto depois de pronto.
   <img src="images/new-appointment.png" alt="Captura de tela 2" width="300"/>
 </p>
 
-Para ver todas as telas segue o link  para o site do Canva. https://tinyurl.com/4e6z47ys
+Para ver todas as telas segue o link para o projeto no site do Canva. https://tinyurl.com/4e6z47ys
 
 ## Tecnologias utilizadas
 
@@ -85,3 +85,7 @@ src/main/java/com/mateus/petcontrolsystem/PetcontrolsystemApplication.java
 
 2. Ambiente Docker: ainda indisponível
 
+## Autores
+
+- [Mateus Fonseca - GitHub](https://github.com/mateusf-prog)
+- [Mateus Fonseca - LinkedIn](https://www.linkedin.com/in/mateus-fprog)
