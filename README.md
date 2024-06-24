@@ -45,7 +45,7 @@ O sistema contempla a arquitetura em camadas contendo as seguintes camadas:
 A parte de segurança da aplicação conta com a criação de tokens JWT. Todas as requisições passam por um filtro personalizado onde esse filtro trata os tokens.
 
 <img src="images/tokens.png" alt="Captura de tela 1" width="400"/>
-<img src="images/security-filter.png" alt="Captura de tela 1" width="400" height="300"/>
+<img src="images/security-filter.png" alt="Captura de tela 1" width="700" height="500"/>
 
 Os únicos endpoints que são públicos, são:
 
@@ -53,6 +53,11 @@ Os únicos endpoints que são públicos, são:
 - /auth/register: Página de registro de um novo usuário
 - /auth/passwordRecover: Página de recuperação de senha
 - /auth/confirmCode: Página de confirmação do código recebido no email para recuperação de senha.
+
+
+## Banco de dados e seeding
+
+Atualmente esse projeto contém apenas as configurações de banco de dados para o banco de dados de teste H2. Na pasta resources do projeto, contém o arquivo import.sql para o seeding do banco. Futuramente será utilizado o banco de dados PostgreSQL em um container Docker.
 
 
 ## Testes
@@ -79,3 +84,4 @@ src/main/java/com/mateus/petcontrolsystem/PetcontrolsystemApplication.java
 ```
 
 2. Ambiente Docker: ainda indisponível
+
