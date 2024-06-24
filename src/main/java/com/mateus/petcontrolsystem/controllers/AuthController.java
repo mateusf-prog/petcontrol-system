@@ -7,6 +7,7 @@ import com.mateus.petcontrolsystem.dto.password.EmailToRecoverPasswordDTO;
 import com.mateus.petcontrolsystem.dto.password.NewPasswordToRecoveryAccount;
 import com.mateus.petcontrolsystem.services.PasswordRecoveryService;
 import com.mateus.petcontrolsystem.services.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,7 +27,7 @@ public class AuthController {
     private final PasswordRecoveryService recoveryPasswordService;
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO body) {
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid LoginRequestDTO body) {
         LoginResponseDTO response = userService.login(body);
         return ResponseEntity.ok(response);
     }
