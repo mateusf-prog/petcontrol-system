@@ -2,10 +2,8 @@ package com.mateus.petcontrolsystem.dto;
 
 import com.mateus.petcontrolsystem.utils.CpfCnpj;
 import com.mateus.petcontrolsystem.utils.Phone;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
-import org.hibernate.validator.constraints.br.CPF;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 
@@ -23,8 +21,12 @@ public record RegisterRequestDTO(
         @NotBlank(message = "Phone number cannot be null")
         @Phone
         String phone,
-        // todo: validate this fields
+        @Past(message = "Invalid birthDate")
         LocalDate birthDate,
+        @NotBlank(message = "Password cannot be null")
+        @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}$", message = "Password must have at least 8 characters, " +
+                "one uppercase letter, one lowercase letter and one number. Ex: Password123")
         String password,
+        @Valid
         AddressDTO address
 ) {}
