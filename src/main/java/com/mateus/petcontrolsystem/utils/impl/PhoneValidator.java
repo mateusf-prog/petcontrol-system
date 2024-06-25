@@ -1,5 +1,6 @@
-package com.mateus.petcontrolsystem.utils;
+package com.mateus.petcontrolsystem.utils.impl;
 
+import com.mateus.petcontrolsystem.utils.Phone;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 

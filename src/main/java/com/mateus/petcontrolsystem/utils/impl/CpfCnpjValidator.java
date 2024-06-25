@@ -1,5 +1,6 @@
-package com.mateus.petcontrolsystem.utils;
+package com.mateus.petcontrolsystem.utils.impl;
 
+import com.mateus.petcontrolsystem.utils.CpfCnpj;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.hibernate.validator.internal.constraintvalidators.hv.br.CNPJValidator;
