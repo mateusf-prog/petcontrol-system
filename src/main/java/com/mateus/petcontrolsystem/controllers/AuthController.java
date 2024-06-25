@@ -41,19 +41,19 @@ public class AuthController {
     }
 
     @PostMapping("/passwordRecover")
-    public ResponseEntity<Void> sendCodeToEmail(@RequestBody EmailToRecoverPasswordDTO body) {
+    public ResponseEntity<Void> sendCodeToEmail(@RequestBody @Valid EmailToRecoverPasswordDTO body) {
         recoveryPasswordService.sendCodeToEmail(body);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/confirmCode")
-    public ResponseEntity<CodeReceivedEmailResponseDTO> validateCodeReceivedInEmail(@RequestBody CodeReceivedInEmailRequestDTO body) {
+    public ResponseEntity<CodeReceivedEmailResponseDTO> validateCodeReceivedInEmail(@RequestBody @Valid CodeReceivedInEmailRequestDTO body) {
         CodeReceivedEmailResponseDTO token = recoveryPasswordService.validateCodeReceivedInEmail(body);
         return ResponseEntity.ok().body(token);
     }
 
     @PostMapping("/setNewPassword")
-    public ResponseEntity<EmailToRecoverPasswordDTO> setNewPassword(@RequestBody NewPasswordToRecoveryAccount body) {
+    public ResponseEntity<EmailToRecoverPasswordDTO> setNewPassword(@RequestBody @Valid NewPasswordToRecoveryAccount body) {
         EmailToRecoverPasswordDTO result = recoveryPasswordService.setNewUserPassword(body);
         return ResponseEntity.ok().body(result);
     }
