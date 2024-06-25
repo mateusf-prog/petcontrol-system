@@ -1,6 +1,6 @@
-package com.mateus.petcontrolsystem.utils;
+package com.mateus.petcontrolsystem.dto.validators;
 
-import com.mateus.petcontrolsystem.utils.impl.ZipCodeValidator;
+import com.mateus.petcontrolsystem.dto.validators.impl.ZipCodeValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 

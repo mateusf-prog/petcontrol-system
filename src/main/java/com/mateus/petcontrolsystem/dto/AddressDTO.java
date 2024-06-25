@@ -1,6 +1,6 @@
 package com.mateus.petcontrolsystem.dto;
 
-import com.mateus.petcontrolsystem.utils.ZipCode;
+import com.mateus.petcontrolsystem.dto.validators.ZipCode;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;

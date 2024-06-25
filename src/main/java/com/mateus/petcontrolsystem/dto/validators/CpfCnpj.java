@@ -1,20 +1,19 @@
-package com.mateus.petcontrolsystem.utils;
+package com.mateus.petcontrolsystem.dto.validators;
 
-import com.mateus.petcontrolsystem.utils.impl.PhoneValidator;
+import com.mateus.petcontrolsystem.dto.validators.impl.CpfCnpjValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Constraint(validatedBy = PhoneValidator.class)
+@Constraint(validatedBy = CpfCnpjValidator.class)
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Phone {
+public @interface CpfCnpj {
 
-    String message() default "Invalid phone number";
+    String message() default "Invalid CPF or CNPJ";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

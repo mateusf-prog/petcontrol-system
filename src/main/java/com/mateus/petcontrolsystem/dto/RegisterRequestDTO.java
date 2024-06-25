@@ -1,7 +1,7 @@
 package com.mateus.petcontrolsystem.dto;
 
-import com.mateus.petcontrolsystem.utils.CpfCnpj;
-import com.mateus.petcontrolsystem.utils.Phone;
+import com.mateus.petcontrolsystem.dto.validators.CpfCnpj;
+import com.mateus.petcontrolsystem.dto.validators.Phone;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 
