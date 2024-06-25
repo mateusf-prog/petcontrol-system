@@ -45,7 +45,7 @@ O sistema contempla a arquitetura em camadas contendo as seguintes camadas:
 A parte de segurança da aplicação conta com a criação de tokens JWT. Todas as requisições passam por um filtro personalizado onde esse filtro trata os tokens.
 
 <img src="images/tokens.png" alt="Captura de tela 1" width="400"/>
-<img src="images/security-filter.png" alt="Captura de tela 1" width="750" height="300"/>
+<img src="images/security-filter.png" alt="Captura de tela 1" width="1000" height="400"/>
 
 Os únicos endpoints que são públicos, são:
 
