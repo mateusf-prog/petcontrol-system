@@ -11,6 +11,8 @@ import com.mateus.petcontrolsystem.dto.LoginResponseDTO;
 import com.mateus.petcontrolsystem.infra.security.TokenService;
 import com.mateus.petcontrolsystem.repositories.UserRepository;
 import com.mateus.petcontrolsystem.services.UserService;
+import com.mateus.petcontrolsystem.services.exceptions.InvalidPasswordException;
+import com.mateus.petcontrolsystem.services.exceptions.ResourceNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -58,6 +60,29 @@ public class UserServiceTest {
         LoginRequestDTO dto = new LoginRequestDTO(user.getEmail(), user.getPassword());
 
         assertThatThrownBy(() -> service.login(dto)).isInstanceOf(RuntimeException.class);
+    }
+
+    @Test
+    public void login_WithNonExistingUser_ThrowsException() {
+
+        var validUser = UserConstants.getValidUser();
+        LoginRequestDTO dto = new LoginRequestDTO(validUser.getEmail(), validUser.getPassword());
+
+        when(repository.findByEmail(validUser.getEmail())).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> service.login(dto)).isInstanceOf(ResourceNotFoundException.class);
+    }
+
+    @Test
+    public void login_WithInvalidPassword_ThrowsException() {
+
+        var validUser = UserConstants.getValidUser();
+        LoginRequestDTO dto = new LoginRequestDTO(validUser.getEmail(), validUser.getPassword());
+
+        when(repository.findByEmail(validUser.getEmail())).thenReturn(Optional.of(validUser));
+        when(passwordEncoder.matches(dto.password(), validUser.getPassword())).thenReturn(false);
+
+        assertThatThrownBy(() -> service.login(dto)).isInstanceOf(InvalidPasswordException.class);
     }
 }
 
