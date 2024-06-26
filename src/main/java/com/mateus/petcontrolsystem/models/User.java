@@ -14,6 +14,7 @@ public class User extends Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false)
     private String password;
     @Embedded
     private Address address;

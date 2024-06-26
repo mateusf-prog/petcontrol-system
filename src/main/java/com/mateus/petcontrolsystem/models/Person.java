@@ -12,12 +12,14 @@ import java.time.LocalDate;
 @MappedSuperclass
 public abstract class Person {
 
+    @Column(nullable = false)
     private String name;
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String email;
+    @Column(nullable = false)
     private String phone;
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String cpfCnpj;
-    @Column(columnDefinition = "DATE")
+    @Column(columnDefinition = "DATE", nullable = false)
     private LocalDate birthDate;
 }
