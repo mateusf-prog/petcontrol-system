@@ -1,12 +1,12 @@
 package com.mateus.petcontrolsystem.models;
 
-import static com.mateus.petcontrolsystem.common.LoginConstants.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mateus.petcontrolsystem.common.LoginConstants;
+import com.mateus.petcontrolsystem.common.UserConstants;
+import com.mateus.petcontrolsystem.dto.LoginRequestDTO;
 import com.mateus.petcontrolsystem.dto.LoginResponseDTO;
 import com.mateus.petcontrolsystem.infra.security.TokenService;
 import com.mateus.petcontrolsystem.repositories.UserRepository;
@@ -37,15 +37,16 @@ public class UserServiceTest {
     @Test
     public void login_WithValidData_ReturnsLoginResponseDTO() {
 
-        var user = LoginConstants.convertDtoToUser(LOGIN);
-        user.setName("name-test");
-        LoginResponseDTO expectedResponse = new LoginResponseDTO("name-test", "generated-token");
+        var validUser = UserConstants.getValidUser();
 
-        when(repository.findByEmail(LOGIN.email())).thenReturn(Optional.of(user));
-        when(passwordEncoder.matches(LOGIN.password(), LOGIN.password())).thenReturn(true);
-        when(tokenService.generateToken(user)).thenReturn(expectedResponse.token());
+        LoginRequestDTO dto = new LoginRequestDTO(validUser.getEmail(), validUser.getPassword());
+        LoginResponseDTO expectedResponse = new LoginResponseDTO(validUser.getName(), "generated-token");
 
-        LoginResponseDTO sut = service.login(LOGIN);
+        when(repository.findByEmail(validUser.getEmail())).thenReturn(Optional.of(validUser));
+        when(passwordEncoder.matches(validUser.getPassword(),validUser.getPassword())).thenReturn(true);
+        when(tokenService.generateToken(validUser)).thenReturn(expectedResponse.token());
+
+        LoginResponseDTO sut = service.login(dto);
 
         assertThat(sut).isEqualTo(expectedResponse);
     }
@@ -53,10 +54,10 @@ public class UserServiceTest {
     @Test
     public void login_WithInvalidData_ThrowsException() {
 
-        var user = LoginConstants.convertDtoToUser(INVALID_LOGIN);
+        var user = UserConstants.getInvalidUser();
+        LoginRequestDTO dto = new LoginRequestDTO(user.getEmail(), user.getPassword());
 
-        assertThatThrownBy(() -> service.login(INVALID_LOGIN)).isInstanceOf(RuntimeException.class);
+        assertThatThrownBy(() -> service.login(dto)).isInstanceOf(RuntimeException.class);
     }
-
 }
 

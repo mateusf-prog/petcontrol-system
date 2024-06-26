@@ -1,9 +1,9 @@
 package com.mateus.petcontrolsystem.models;
 
-import static com.mateus.petcontrolsystem.common.LoginConstants.LOGIN;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.mateus.petcontrolsystem.common.LoginConstants;
+import com.mateus.petcontrolsystem.common.UserConstants;
 import com.mateus.petcontrolsystem.repositories.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,15 +22,30 @@ public class UserRepositoryTest {
     @Test
     public void login_WithValidData_ReturnsLoginResponseDTO() {
 
-        var object = LoginConstants.convertDtoToUser(LOGIN);
+        User userCreated = repository.save(UserConstants.getValidUser());
 
-        User user = repository.save(object);
-
-        User sut = testEntityManager.find(User.class, user.getId());
+        User sut = testEntityManager.find(User.class, userCreated.getId());
 
         assertThat(sut).isNotNull();
-        assertThat(sut.getPassword()).isEqualTo(object.getPassword());
-        assertThat(sut.getEmail()).isEqualTo(object.getEmail());
+        assertThat(sut.getPassword()).isEqualTo(userCreated.getPassword());
+        assertThat(sut.getEmail()).isEqualTo(userCreated.getEmail());
+    }
 
+    @Test
+    public void login_WithInvalidData_ReturnsThrowsException() {
+
+        assertThatThrownBy(() -> repository.save(new User())).isInstanceOf(RuntimeException.class);
+    }
+
+    @Test
+    public void login_WithAlreadyUser_ThrowsException() {
+
+        var validUser = UserConstants.getValidUser();
+
+        testEntityManager.persistFlushFind(validUser);
+        testEntityManager.detach(validUser);
+        validUser.setId(null);
+
+        assertThatThrownBy(() -> repository.save(validUser)).isInstanceOf(RuntimeException.class);
     }
 }
