@@ -1,10 +1,12 @@
 package com.mateus.petcontrolsystem.models;
 
-import static com.mateus.petcontrolsystem.common.LoginConstants.LOGIN_REQUEST;
+import static com.mateus.petcontrolsystem.common.LoginConstants.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mateus.petcontrolsystem.common.LoginConstants;
 import com.mateus.petcontrolsystem.dto.LoginResponseDTO;
 import com.mateus.petcontrolsystem.infra.security.TokenService;
 import com.mateus.petcontrolsystem.repositories.UserRepository;
@@ -35,22 +37,26 @@ public class UserServiceTest {
     @Test
     public void login_WithValidData_ReturnsLoginResponseDTO() {
 
-        // arrange
-        User user = new User();
-        user.setEmail(LOGIN_REQUEST.email());
-        user.setPassword(LOGIN_REQUEST.password());
+        var user = LoginConstants.convertDtoToUser(LOGIN);
         user.setName("name-test");
         LoginResponseDTO expectedResponse = new LoginResponseDTO("name-test", "generated-token");
 
-        when(repository.findByEmail(LOGIN_REQUEST.email())).thenReturn(Optional.of(user));
-        when(passwordEncoder.matches(LOGIN_REQUEST.password(), LOGIN_REQUEST.password())).thenReturn(true);
+        when(repository.findByEmail(LOGIN.email())).thenReturn(Optional.of(user));
+        when(passwordEncoder.matches(LOGIN.password(), LOGIN.password())).thenReturn(true);
         when(tokenService.generateToken(user)).thenReturn(expectedResponse.token());
 
-        // act
-        LoginResponseDTO sut = service.login(LOGIN_REQUEST);
+        LoginResponseDTO sut = service.login(LOGIN);
 
-        // assert
         assertThat(sut).isEqualTo(expectedResponse);
     }
+
+    @Test
+    public void login_WithInvalidData_ThrowsException() {
+
+        var user = LoginConstants.convertDtoToUser(INVALID_LOGIN);
+
+        assertThatThrownBy(() -> service.login(INVALID_LOGIN)).isInstanceOf(RuntimeException.class);
+    }
+
 }
 
