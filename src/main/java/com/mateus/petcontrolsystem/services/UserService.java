@@ -33,7 +33,7 @@ public class UserService {
         if (!passwordEncoder.matches(body.password(), user.getPassword())) {
             throw new InvalidPasswordException("INVALID PASSWORD");
         }
-        return new LoginResponseDTO(user.getName(), tokenService.generateToken(user));
+        return new LoginResponseDTO(tokenService.generateToken(user));
     }
 
     @Transactional
@@ -53,7 +53,7 @@ public class UserService {
         newUser = repository.save(newUser);
         String token = tokenService.generateToken(newUser);
 
-        return new RegisterResponseDTO(newUser.getId(), newUser.getName(), token);
+        return new RegisterResponseDTO(token);
     }
 
     @Transactional

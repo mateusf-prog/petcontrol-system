@@ -35,9 +35,7 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<RegisterResponseDTO> register(@RequestBody @Valid RegisterRequestDTO body) {
         RegisterResponseDTO response = userService.register(body);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-                .buildAndExpand(response.id()).toUri();
-        return ResponseEntity.created(uri).body(response);
+        return ResponseEntity.created(null).body(response);
     }
 
     @PostMapping("/passwordRecover")
