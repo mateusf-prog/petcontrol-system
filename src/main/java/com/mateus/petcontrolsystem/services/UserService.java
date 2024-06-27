@@ -37,7 +37,7 @@ public class UserService {
     }
 
     @Transactional
-    public RegisterResponseDTO register(RegisterRequestDTO body) {
+    public void register(RegisterRequestDTO body) {
 
         User user = repository.findByEmailOrCpfCnpj(body.email(), body.cpfCnpj());
         if (user != null) {
@@ -52,8 +52,6 @@ public class UserService {
         newUser.setPassword(passwordEncoder.encode(body.password()));
         newUser = repository.save(newUser);
         String token = tokenService.generateToken(newUser);
-
-        return new RegisterResponseDTO(token);
     }
 
     @Transactional

@@ -33,9 +33,9 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<RegisterResponseDTO> register(@RequestBody @Valid RegisterRequestDTO body) {
-        RegisterResponseDTO response = userService.register(body);
-        return ResponseEntity.created(null).body(response);
+    public ResponseEntity<Void> register(@RequestBody @Valid RegisterRequestDTO body) {
+        userService.register(body);
+        return ResponseEntity.created(null).body(null);
     }
 
     @PostMapping("/passwordRecover")
