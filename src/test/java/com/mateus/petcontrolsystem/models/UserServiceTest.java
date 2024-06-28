@@ -2,6 +2,8 @@ package com.mateus.petcontrolsystem.models;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,13 +38,14 @@ public class UserServiceTest {
     @Mock
     private PasswordEncoder passwordEncoder;
 
+    // login tests
     @Test
     public void login_WithValidData_ReturnsLoginResponseDTO() {
 
         var validUser = UserConstants.getValidUser();
 
         LoginRequestDTO dto = new LoginRequestDTO(validUser.getEmail(), validUser.getPassword());
-        LoginResponseDTO expectedResponse = new LoginResponseDTO(validUser.getName(), "generated-token");
+        LoginResponseDTO expectedResponse = new LoginResponseDTO("generated-token");
 
         when(repository.findByEmail(validUser.getEmail())).thenReturn(Optional.of(validUser));
         when(passwordEncoder.matches(validUser.getPassword(),validUser.getPassword())).thenReturn(true);
@@ -83,6 +86,39 @@ public class UserServiceTest {
         when(passwordEncoder.matches(dto.password(), validUser.getPassword())).thenReturn(false);
 
         assertThatThrownBy(() -> service.login(dto)).isInstanceOf(InvalidPasswordException.class);
+    }
+
+    // register tests
+    @Test
+    public void register_WithValidData_ReturnsRegisterResponseDTO() {
+
+        var validUser = UserConstants.getValidRegisterRequestDTO();
+
+        when(passwordEncoder.encode(validUser.password())).thenReturn("password-encoded");
+        when(mapper.convertValue(validUser, User.class)).thenReturn(new User());
+
+        service.register(validUser);
+
+        verify(repository).save(any(User.class));
+    }
+
+    @Test
+    public void register_WithInvalidData_ThrowsException() {
+
+        var invalidUser = UserConstants.getInValidRegisterRequestDTO();
+
+        assertThatThrownBy(() -> service.register(invalidUser)).isInstanceOf(RuntimeException.class);
+    }
+
+    @Test
+    public void register_WithAlreadyExistsByEmailAndCpfCnpj_ThrowsException() {
+
+        var validUser = UserConstants.getValidRegisterRequestDTO();
+
+        when(repository.findByEmailOrCpfCnpj(validUser.email(), validUser.cpfCnpj())).thenReturn(new User());
+
+        assertThatThrownBy(() -> service.register(validUser)).isInstanceOf(RuntimeException.class);
+        verify(repository).findByEmailOrCpfCnpj(validUser.email(), validUser.cpfCnpj());
     }
 }
 

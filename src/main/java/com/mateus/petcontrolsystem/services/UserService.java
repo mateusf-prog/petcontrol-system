@@ -50,8 +50,7 @@ public class UserService {
 
         User newUser = mapper.convertValue(body, User.class);
         newUser.setPassword(passwordEncoder.encode(body.password()));
-        newUser = repository.save(newUser);
-        String token = tokenService.generateToken(newUser);
+        repository.save(newUser);
     }
 
     @Transactional
