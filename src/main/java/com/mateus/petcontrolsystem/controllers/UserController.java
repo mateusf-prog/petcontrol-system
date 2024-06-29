@@ -5,6 +5,7 @@ import com.mateus.petcontrolsystem.dto.UpdateUserDTO;
 import com.mateus.petcontrolsystem.dto.UserAccessDataRequestDTO;
 import com.mateus.petcontrolsystem.dto.UserAccessDataResponseDTO;
 import com.mateus.petcontrolsystem.services.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,9 +17,9 @@ public class UserController {
 
     private final UserService service;
 
-    @PutMapping("/{id}")
-    public ResponseEntity<UpdateUserDTO> update(@RequestBody UpdateUserDTO body, @PathVariable Long id) throws JsonMappingException {
-        body = service.update(body, id);
+    @PutMapping
+    public ResponseEntity<UpdateUserDTO> update(@RequestBody @Valid UpdateUserDTO body) throws JsonMappingException {
+        body = service.update(body);
         return ResponseEntity.ok(body);
     }
 
