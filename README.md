@@ -64,6 +64,8 @@ Atualmente esse projeto contém apenas as configurações de banco de dados para
 
 Este projeto utiliza JUnit e Mockito para testes unitários. A cobertura de testes abrange todas as camadas do projeto, incluindo controladores, serviços e repositórios.
 
+<img src="images/tests.png" alt="Captura de tela 1" width="1000" height="500"/>
+
 Para executar os testes, você pode usar o seguinte comando no terminal:
 
 ```bash
