@@ -2,7 +2,6 @@ package com.mateus.petcontrolsystem.models;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.InstanceOfAssertFactories.map;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -10,12 +9,11 @@ import static org.mockito.Mockito.when;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mateus.petcontrolsystem.common.UserConstants;
-import com.mateus.petcontrolsystem.dto.LoginRequestDTO;
-import com.mateus.petcontrolsystem.dto.LoginResponseDTO;
-import com.mateus.petcontrolsystem.dto.UpdateUserDTO;
+import com.mateus.petcontrolsystem.dto.*;
 import com.mateus.petcontrolsystem.infra.security.TokenService;
 import com.mateus.petcontrolsystem.repositories.UserRepository;
 import com.mateus.petcontrolsystem.services.UserService;
+import com.mateus.petcontrolsystem.services.exceptions.EntityAlreadyExistsException;
 import com.mateus.petcontrolsystem.services.exceptions.InvalidPasswordException;
 import com.mateus.petcontrolsystem.services.exceptions.ResourceNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
@@ -26,6 +24,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
@@ -42,7 +42,8 @@ public class UserServiceTest {
     @Mock
     private PasswordEncoder passwordEncoder;
 
-    // login tests
+    // 'login' tests
+
     @Test
     public void login_WithValidData_ReturnsLoginResponseDTO() {
 
@@ -92,7 +93,8 @@ public class UserServiceTest {
         assertThatThrownBy(() -> service.login(dto)).isInstanceOf(InvalidPasswordException.class);
     }
 
-    // register tests
+    // 'register' tests
+
     @Test
     public void register_WithValidData_ReturnsRegisterResponseDTO() {
 
@@ -125,14 +127,16 @@ public class UserServiceTest {
         verify(repository).findByEmailOrCpfCnpj(validUser.email(), validUser.cpfCnpj());
     }
 
+    // 'update' test
+
     @Test
     public void update_WithValidData_ReturnsUpdatedUserDTO() throws JsonMappingException {
 
-        var validUser = UserConstants.getUpdateUserDTO();
+        var validUser = UserConstants.getValidUserUpdateDto();
         var validEntity = UserConstants.getValidUser();
 
         var updatedEntity = UserConstants.getValidUser(); // represent the updated User
-        var expectedResponse = UserConstants.getUpdateUserDTO(); // represent the updated User as UpdateUserDTO
+        var expectedResponse = UserConstants.getValidUserUpdateDto(); // represent the updated User as UpdateUserDTO
 
         when(repository.findByCpfCnpj(validUser.cpfCnpj())).thenReturn(Optional.of(validEntity));
         when(mapper.updateValue(validEntity, validUser)).thenReturn(updatedEntity);
@@ -144,9 +148,17 @@ public class UserServiceTest {
     }
 
     @Test
+    public void update_WithInvalidData_ThrowsException() {
+
+        var invalidUser = UserConstants.getInValidUserUpdateDto();
+
+        assertThatThrownBy(() -> service.update(invalidUser)).isInstanceOf(RuntimeException.class);
+    }
+
+    @Test
     public void update_WithNotExistsUser_ThrowsException() throws JsonMappingException {
 
-        var validUser = UserConstants.getUpdateUserDTO();
+        var validUser = UserConstants.getValidUserUpdateDto();
 
         when(repository.findByCpfCnpj(validUser.cpfCnpj())).thenReturn(Optional.empty());
 
@@ -155,7 +167,7 @@ public class UserServiceTest {
 
     @Test
     public void update_WhenUpdateValueThrowsException_ThrowsJsonMappingException() throws JsonMappingException {
-        var validUser = UserConstants.getUpdateUserDTO();
+        var validUser = UserConstants.getValidUserUpdateDto();
         var validEntity = UserConstants.getValidUser();
 
 
@@ -168,7 +180,7 @@ public class UserServiceTest {
 
     @Test
     public void update_WhenConvertValueThrowsException_ThrowsJsonMappingException() throws JsonMappingException {
-        var validUser = UserConstants.getUpdateUserDTO();
+        var validUser = UserConstants.getValidUserUpdateDto();
         var validEntity = UserConstants.getValidUser();
         var updatedEntity = UserConstants.getValidUser();
 
@@ -181,7 +193,85 @@ public class UserServiceTest {
                 .isInstanceOf(RuntimeException.class);
     }
 
+    // 'updateAccessData' tests
 
+    @Test
+    public void updateAccessData_WithValidData_ReturnsUserAccessDataResponseDTO() {
+
+        var validUserAccessData = UserConstants.getValidUserAccessDataDTO();
+        var validEntity = UserConstants.getValidUser();
+        var expectedResponse = new UserAccessDataResponseDTO(validUserAccessData.email());
+
+        when(repository.findById(validEntity.getId())).thenReturn(Optional.of(validEntity));
+        when(passwordEncoder.matches(validUserAccessData.actualPassword(), validEntity.getPassword())).thenReturn(true);
+        when(passwordEncoder.encode(validUserAccessData.newPassword())).thenReturn("password-encoded");
+        when(repository.save(validEntity)).thenReturn(validEntity);
+        when(mapper.convertValue(validEntity, UserAccessDataResponseDTO.class)).thenReturn(expectedResponse);
+
+        UserAccessDataResponseDTO sut = service.updateAccessData(validUserAccessData, validEntity.getId());
+
+        assertThat(sut).isNotNull();
+        assertThat(sut.email()).isEqualTo(expectedResponse.email());
+    }
+
+    @Test
+    public void updateAccessData_WithInvalidData_ThrowsException() {
+
+        var validUserAccessData = new UserAccessDataRequestDTO("", null, "");
+
+        // the value of id is irrelevant for this case
+        when(repository.findByEmail(validUserAccessData.email())).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> service.updateAccessData(validUserAccessData, 3L)).isInstanceOf(EntityNotFoundException.class);
+    }
+
+    @Test
+    public void updateAccessData_WithInvalidId_ThrowsException() {
+
+        var validUserAccessData = UserConstants.getValidUserAccessDataDTO();
+
+        when(repository.findById(0L)).thenReturn(Optional.empty()); //invalid id '0'
+
+        assertThatThrownBy(() -> service.updateAccessData(validUserAccessData, 0L)).isInstanceOf(EntityNotFoundException.class);
+    }
+
+    @Test
+    public void updateAccessData_WithAlreadyExistsEmail_ThrowsException() {
+
+        var validUserAccessData = UserConstants.getValidUserAccessDataDTO();
+
+        // the value of id is irrelevant for this case
+        when(repository.findByEmail(validUserAccessData.email())).thenReturn(Optional.of(new User()));
+
+        assertThatThrownBy(() -> service.updateAccessData(validUserAccessData, 3L)).isInstanceOf(EntityAlreadyExistsException.class);
+    }
+
+    @Test
+    public void updateAccessData_WithNotExistsUserById_ThrowsException() {
+
+        var validUserAccessData = UserConstants.getValidUserAccessDataDTO();
+
+        // the value of id is irrelevant for this case
+        when(repository.findByEmail(validUserAccessData.email())).thenReturn(Optional.empty());
+        when(repository.findById(3L)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> service.updateAccessData(validUserAccessData, 3L)).isInstanceOf(EntityNotFoundException.class);
+    }
+
+    @Test
+    public void updateAccessData_WithInvalidOldPassword_ThrowsException() {
+
+        var validUserAccessData = UserConstants.getValidUserAccessDataDTO();
+        var validEntity = UserConstants.getValidUser();
+
+        // the value of id is irrelevant for this case
+        when(repository.findByEmail(validUserAccessData.email())).thenReturn(Optional.empty());
+        when(repository.findById(3L)).thenReturn(Optional.of(validEntity));
+        when(passwordEncoder.matches(validUserAccessData.actualPassword(), validEntity.getPassword())).thenReturn(false);
+
+
+        assertThatThrownBy(() -> service.updateAccessData(validUserAccessData, 3L)).isInstanceOf(InvalidPasswordException.class);
+    }
 
 }
 
