@@ -2,6 +2,7 @@ package com.mateus.petcontrolsystem.common;
 
 import com.mateus.petcontrolsystem.dto.AddressDTO;
 import com.mateus.petcontrolsystem.dto.RegisterRequestDTO;
+import com.mateus.petcontrolsystem.dto.UpdateUserDTO;
 import com.mateus.petcontrolsystem.models.Address;
 import com.mateus.petcontrolsystem.models.User;
 
@@ -45,5 +46,10 @@ public class UserConstants {
         return new RegisterRequestDTO(null, null, null, null,
                 null, null,
                 new AddressDTO(null, null, null, null, null, null));
+    }
+
+    public static UpdateUserDTO getUpdateUserDTO() {
+        return new UpdateUserDTO("Jon Doe", "1299999999", "50108953076",
+                new AddressDTO("Rua José Domingues", "170", "Centro", "São José dos Campos", "SP", "12212700"));
     }
 }
