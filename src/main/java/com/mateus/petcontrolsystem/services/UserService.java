@@ -67,9 +67,8 @@ public class UserService {
     @Transactional
     public UserAccessDataResponseDTO updateAccessData(UserAccessDataRequestDTO body, Long id) {
 
-        List<User> allUsers = repository.findAll();
-        Optional<User> checkUserByEmail = allUsers.stream().filter(user -> user.getEmail().equals(body.email())).findFirst();
-        if (checkUserByEmail.isPresent() && !checkUserByEmail.get().getId().equals(id)) {
+        Optional<User> existsByEmail = repository.findByEmail(body.email());
+        if (existsByEmail.isPresent()) {
             throw new EntityAlreadyExistsException("EMAIL ALREADY IN USE");
         }
 
