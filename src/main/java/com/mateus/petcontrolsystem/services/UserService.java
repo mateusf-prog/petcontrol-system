@@ -41,9 +41,9 @@ public class UserService {
 
         User user = repository.findByEmailOrCpfCnpj(body.email(), body.cpfCnpj());
         if (user != null) {
-            if (user.getEmail().equals(body.email())) {
+            if (user.getEmail().equals(body.email()))
                 throw new EntityAlreadyExistsException("USER ALREADY EXISTS BY EMAIL");
-            }
+
             if (user.getCpfCnpj().equals(body.cpfCnpj()))
                 throw new EntityAlreadyExistsException("USER ALREADY EXISTS BY CPF/CNPJ");
         }
@@ -54,15 +54,14 @@ public class UserService {
     }
 
     @Transactional
-    public UpdateUserDTO update(UpdateUserDTO body, Long id) throws JsonMappingException {
+    public UpdateUserDTO update(UpdateUserDTO body) throws JsonMappingException {
 
-        Optional<User> optionalUser = repository.findById(id);
-        if (optionalUser.isEmpty()) throw new EntityNotFoundException("ENTITY NOT FOUND");
+        User entity = repository.findByCpfCnpj(body.cpfCnpj()).orElseThrow(
+                () -> new EntityNotFoundException("ENTITY NOT FOUND"));
 
-        User existingUser = optionalUser.get();
-        mapper.updateValue(existingUser, body);
-        repository.save(existingUser);
-        return mapper.convertValue(existingUser, UpdateUserDTO.class);
+        User userUpdated = mapper.updateValue(entity, body);
+        repository.save(userUpdated);
+        return mapper.convertValue(userUpdated, UpdateUserDTO.class);
     }
 
     @Transactional
