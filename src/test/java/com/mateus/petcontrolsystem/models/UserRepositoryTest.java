@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
+import java.util.Optional;
+
 @DataJpaTest
 public class UserRepositoryTest {
 
@@ -20,15 +22,14 @@ public class UserRepositoryTest {
     private TestEntityManager testEntityManager;
 
     @Test
-    public void login_WithValidData_ReturnsLoginResponseDTO() {
+    public void login_WithValidData_ReturnsUser() {
 
-        User userCreated = repository.save(UserConstants.getValidUser());
+        var validUser = UserConstants.getValidUser();
+        testEntityManager.persistAndFlush(validUser);
 
-        User sut = testEntityManager.find(User.class, userCreated.getId());
+        Optional<User> foundUser = repository.findByEmail(validUser.getEmail());
 
-        assertThat(sut).isNotNull();
-        assertThat(sut.getPassword()).isEqualTo(userCreated.getPassword());
-        assertThat(sut.getEmail()).isEqualTo(userCreated.getEmail());
+        assertThat(foundUser).isNotEmpty();
     }
 
     @Test
@@ -38,7 +39,7 @@ public class UserRepositoryTest {
     }
 
     @Test
-    public void login_WithAlreadyUser_ThrowsException() {
+    public void login_WithAlreadyUser_ReturnsThrowsException() {
 
         var validUser = UserConstants.getValidUser();
 
@@ -48,4 +49,53 @@ public class UserRepositoryTest {
 
         assertThatThrownBy(() -> repository.save(validUser)).isInstanceOf(RuntimeException.class);
     }
+
+    @Test
+    public void register_WithValidData_ReturnsUser() {
+
+        var validUser = UserConstants.getValidUser();
+
+        var sut = repository.save(validUser);
+
+        assertThat(sut).isNotNull();
+        assertThat(sut.getEmail()).isEqualTo(validUser.getEmail());
+    }
+
+    @Test
+    public void register_WithInvalidData_ReturnsThrowsException() {
+
+        var invalidUser = UserConstants.getInvalidUser();
+
+        assertThatThrownBy(() -> repository.save(invalidUser)).isInstanceOf(RuntimeException.class);
+    }
+
+    @Test
+    public void register_WithAlreadyUserByEmail_ReturnsThrowsException() {
+
+        var validUser = UserConstants.getValidUser();
+
+        testEntityManager.persistAndFlush(validUser);
+        testEntityManager.detach(validUser);
+        validUser.setId(null);
+
+        assertThatThrownBy(() -> repository.save(validUser)).isInstanceOf(RuntimeException.class);
+    }
+
+    @Test
+    public void update_WithValidData_ReturnsUser() {
+
+        var validUser = UserConstants.getValidUser();
+        testEntityManager.persistAndFlush(validUser);
+
+        var userFound = repository.findByEmailOrCpfCnpj(validUser.getEmail(), validUser.getCpfCnpj());
+        userFound.setName("Maria");
+        userFound.setPhone("11111111111");
+
+        var sut = repository.save(userFound);
+
+        assertThat(sut).isNotNull();
+        assertThat(sut.getName()).isEqualTo(userFound.getName());
+        assertThat(sut.getPhone()).isEqualTo(userFound.getPhone());
+    }
+
 }

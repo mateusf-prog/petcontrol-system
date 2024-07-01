@@ -1,9 +1,6 @@
 package com.mateus.petcontrolsystem.common;
 
-import com.mateus.petcontrolsystem.dto.AddressDTO;
-import com.mateus.petcontrolsystem.dto.RegisterRequestDTO;
-import com.mateus.petcontrolsystem.dto.UpdateUserDTO;
-import com.mateus.petcontrolsystem.dto.UserAccessDataRequestDTO;
+import com.mateus.petcontrolsystem.dto.*;
 import com.mateus.petcontrolsystem.models.Address;
 import com.mateus.petcontrolsystem.models.User;
 
