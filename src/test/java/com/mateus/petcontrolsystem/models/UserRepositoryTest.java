@@ -48,6 +48,97 @@ public class UserRepositoryTest {
     }
 
     @Test
+    public void findByCpfCnpj_WithExistsUserByCpfCnpj_ReturnsUser() {
+
+        var validUser = UserConstants.getValidUser();
+        testEntityManager.persistAndFlush(validUser);
+
+        var sut = repository.findByCpfCnpj(validUser.getCpfCnpj());
+
+        assertThat(sut).isEqualTo(Optional.of(validUser));
+        assertThat(sut.get().getName()).isEqualTo(validUser.getName());
+        assertThat(sut.get().getCpfCnpj()).isEqualTo(validUser.getCpfCnpj());
+    }
+
+    @Test
+    public void findByCpfCnpj_WithNonExistentUserByCpfCnpj_ReturnsEmptyOptional() {
+
+        var validUser = UserConstants.getValidUser();
+
+        var sut = repository.findByCpfCnpj(validUser.getCpfCnpj());
+
+        assertThat(sut).isEqualTo(Optional.empty());
+    }
+
+    @Test
+    public void findByCpfCnpj_WithInvalidByCpfCnpj_ReturnsEmptyOptional() {
+
+        var sut = repository.findByCpfCnpj(null);
+
+        assertThat(sut).isEqualTo(Optional.empty());
+    }
+
+    @Test
+    public void findByCpfCnpj_WithEmptyString_ReturnsEmptyOptional() {
+
+        var sut = repository.findByCpfCnpj("");
+
+        assertThat(sut).isEqualTo(Optional.empty());
+    }
+
+    @Test
+    public void findByEmailOrCpfCnpj_WithValidEmailAndCpfCnpj_ReturnsUser() {
+
+        var validUser = UserConstants.getValidUser();
+        testEntityManager.persistAndFlush(validUser);
+
+        var sut = repository.findByEmailOrCpfCnpj(validUser.getEmail(), validUser.getCpfCnpj());
+
+        assertThat(sut).isNotNull();
+        assertThat(sut.getEmail()).isEqualTo(validUser.getEmail());
+    }
+
+    @Test
+    public void findByEmailOrCpfCnpj_WithInvalidEmailAndValidCpfCnpj_ReturnsUser() {
+
+        var validUser= UserConstants.getValidUser();
+        testEntityManager.persistAndFlush(validUser);
+        testEntityManager.detach(validUser);
+
+        var sut = repository.findByEmailOrCpfCnpj(null, validUser.getCpfCnpj());
+
+        assertThat(sut).isNotNull();
+        assertThat(sut.getEmail()).isEqualTo(validUser.getEmail());
+        assertThat(sut.getCpfCnpj()).isEqualTo(validUser.getCpfCnpj());
+    }
+
+    @Test
+    public void findByEmailOrCpfCnpj_WithValidEmailAndInvalidCpfCnpj_ReturnsUser() {
+
+        var validUser= UserConstants.getValidUser();
+        testEntityManager.persistAndFlush(validUser);
+        testEntityManager.detach(validUser);
+
+        var sut = repository.findByEmailOrCpfCnpj(validUser.getEmail(), null);
+
+        assertThat(sut).isNotNull();
+        assertThat(sut.getEmail()).isEqualTo(validUser.getEmail());
+        assertThat(sut.getCpfCnpj()).isEqualTo(validUser.getCpfCnpj());
+    }
+
+    @Test
+    public void findByEmailOrCpfCnpj_WithInvalidData_ReturnsNull() {
+
+        assertThat(repository.findByEmailOrCpfCnpj(null, null)).isNull();
+    }
+
+    @Test
+    public void findByEmailOrCpfCnpj_WithEmptyParameters_ReturnNull() {
+
+        assertThat(repository.findByEmailOrCpfCnpj("", "")).isNull();
+    }
+
+    @Test
     public void save_WithValidData_ReturnsUser() {
 
         var validUser = UserConstants.getValidUser();
