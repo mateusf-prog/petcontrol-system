@@ -63,4 +63,8 @@ public class UserConstants {
     public static UserAccessDataRequestDTO getValidUserAccessDataDTO() {
         return new UserAccessDataRequestDTO("jon.doe@hotmail.com", "Password1234", "NewPassword4321");
     }
+
+    public static LoginRequestDTO getValidLoginRequestDTO() {
+        return new LoginRequestDTO("jon.doe@hotmail.com", "Password1234");
+    }
 }
