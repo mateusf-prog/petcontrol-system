@@ -22,6 +22,7 @@ public record RegisterRequestDTO(
         @NotBlank(message = "Phone number cannot be null")
         @Phone
         String phone,
+        @NotNull
         @AtLeastTwelveYearsAgo
         LocalDate birthDate,
         @NotBlank(message = "Password cannot be null")
