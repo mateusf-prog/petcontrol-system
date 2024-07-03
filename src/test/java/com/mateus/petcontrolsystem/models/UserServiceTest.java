@@ -26,6 +26,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
+/***
+ * This class test, test only the logic operation in UserService. The objects data validation is tested in AuthControllerTest
+ */
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
 
@@ -57,15 +60,6 @@ public class UserServiceTest {
         LoginResponseDTO sut = service.login(dto);
 
         assertThat(sut).isEqualTo(expectedResponse);
-    }
-
-    @Test
-    public void login_WithInvalidData_ThrowsException() {
-
-        var user = UserConstants.getInvalidUser();
-        LoginRequestDTO dto = new LoginRequestDTO(user.getEmail(), user.getPassword());
-
-        assertThatThrownBy(() -> service.login(dto)).isInstanceOf(RuntimeException.class);
     }
 
     @Test
@@ -107,14 +101,6 @@ public class UserServiceTest {
     }
 
     @Test
-    public void register_WithInvalidData_ThrowsException() {
-
-        var invalidUser = UserConstants.getInvalidRegisterRequestDTO();
-
-        assertThatThrownBy(() -> service.register(invalidUser)).isInstanceOf(RuntimeException.class);
-    }
-
-    @Test
     public void register_WithAlreadyExistsByEmailAndCpfCnpj_ThrowsException() {
 
         var validUser = UserConstants.getValidRegisterRequestDTO();
@@ -146,15 +132,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void update_WithInvalidData_ThrowsException() {
-
-        var invalidUser = UserConstants.getInValidUserUpdateDto();
-
-        assertThatThrownBy(() -> service.update(invalidUser)).isInstanceOf(RuntimeException.class);
-    }
-
-    @Test
-    public void update_WithNotExistsUser_ThrowsException() throws JsonMappingException {
+    public void update_WithNotExistsUser_ThrowsException() {
 
         var validUser = UserConstants.getValidUserUpdateDto();
 
@@ -210,27 +188,6 @@ public class UserServiceTest {
 
         assertThat(sut).isNotNull();
         assertThat(sut.email()).isEqualTo(expectedResponse.email());
-    }
-
-    @Test
-    public void updateAccessData_WithInvalidData_ThrowsException() {
-
-        var validUserAccessData = new UserAccessDataRequestDTO("", null, "");
-
-        // the value of id is irrelevant for this case
-        when(repository.findByEmail(validUserAccessData.email())).thenReturn(Optional.empty());
-
-        assertThatThrownBy(() -> service.updateAccessData(validUserAccessData, 3L)).isInstanceOf(EntityNotFoundException.class);
-    }
-
-    @Test
-    public void updateAccessData_WithInvalidId_ThrowsException() {
-
-        var validUserAccessData = UserConstants.getValidUserAccessDataDTO();
-
-        when(repository.findById(0L)).thenReturn(Optional.empty()); //invalid id '0'
-
-        assertThatThrownBy(() -> service.updateAccessData(validUserAccessData, 0L)).isInstanceOf(EntityNotFoundException.class);
     }
 
     @Test
