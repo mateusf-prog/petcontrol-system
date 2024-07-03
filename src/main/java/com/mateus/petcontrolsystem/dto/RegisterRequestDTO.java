@@ -1,5 +1,6 @@
 package com.mateus.petcontrolsystem.dto;
 
+import com.mateus.petcontrolsystem.dto.validators.AtLeastTwelveYearsAgo;
 import com.mateus.petcontrolsystem.dto.validators.CpfCnpj;
 import com.mateus.petcontrolsystem.dto.validators.Phone;
 import jakarta.validation.Valid;
@@ -21,7 +22,7 @@ public record RegisterRequestDTO(
         @NotBlank(message = "Phone number cannot be null")
         @Phone
         String phone,
-        @Past(message = "Invalid birthDate")
+        @AtLeastTwelveYearsAgo
         LocalDate birthDate,
         @NotBlank(message = "Password cannot be null")
         @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}$", message = "Password must have at least 8 characters, " +
