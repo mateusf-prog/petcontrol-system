@@ -20,7 +20,10 @@ public class CpfCnpjValidator implements ConstraintValidator<CpfCnpj, String> {
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
         if (value == null) {
-            return true;
+            return false;
+        }
+        if (value.chars().distinct().count() <= 1) {
+            return false;
         }
         return cpfValidator.isValid(value, context) || cnpjValidator.isValid(value, context);
     }
