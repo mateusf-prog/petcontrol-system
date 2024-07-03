@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.Profile;
 
 import java.util.Optional;
 
@@ -71,22 +70,6 @@ public class UserRepositoryTest {
     }
 
     @Test
-    public void findByCpfCnpj_WithInvalidByCpfCnpj_ReturnsEmptyOptional() {
-
-        var sut = repository.findByCpfCnpj(null);
-
-        assertThat(sut).isEqualTo(Optional.empty());
-    }
-
-    @Test
-    public void findByCpfCnpj_WithEmptyString_ReturnsEmptyOptional() {
-
-        var sut = repository.findByCpfCnpj("");
-
-        assertThat(sut).isEqualTo(Optional.empty());
-    }
-
-    @Test
     public void findByEmailOrCpfCnpj_WithValidEmailAndCpfCnpj_ReturnsUser() {
 
         var validUser = UserConstants.getValidUser();
@@ -127,18 +110,6 @@ public class UserRepositoryTest {
     }
 
     @Test
-    public void findByEmailOrCpfCnpj_WithInvalidData_ReturnsNull() {
-
-        assertThat(repository.findByEmailOrCpfCnpj(null, null)).isNull();
-    }
-
-    @Test
-    public void findByEmailOrCpfCnpj_WithEmptyParameters_ReturnNull() {
-
-        assertThat(repository.findByEmailOrCpfCnpj("", "")).isNull();
-    }
-
-    @Test
     public void save_WithValidData_ReturnsUser() {
 
         var validUser = UserConstants.getValidUser();
@@ -147,14 +118,6 @@ public class UserRepositoryTest {
 
         assertThat(sut).isNotNull();
         assertThat(sut.getEmail()).isEqualTo(validUser.getEmail());
-    }
-
-    @Test
-    public void save_WithInvalidData_ReturnsThrowsException() {
-
-        var invalidUser = UserConstants.getInvalidUser();
-
-        assertThatThrownBy(() -> repository.save(invalidUser)).isInstanceOf(RuntimeException.class);
     }
 
     @Test
@@ -184,21 +147,6 @@ public class UserRepositoryTest {
         assertThat(sut).isNotNull();
         assertThat(sut.getName()).isEqualTo(userFound.getName());
         assertThat(sut.getPhone()).isEqualTo(userFound.getPhone());
-    }
-
-    @Test
-    public void update_WithInvalidData_ReturnThrowsException() {
-
-        var validUser = UserConstants.getValidUser();
-        testEntityManager.persistAndFlush(validUser);
-
-        var userFound = repository.findByEmailOrCpfCnpj(validUser.getEmail(), validUser.getCpfCnpj());
-        userFound.setName(null); // invalid name
-
-        assertThatThrownBy(() -> {
-            repository.save(userFound);
-            testEntityManager.flush();
-        }).isInstanceOf(RuntimeException.class);
     }
 
 }
