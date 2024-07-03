@@ -24,8 +24,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
@@ -111,7 +109,7 @@ public class UserServiceTest {
     @Test
     public void register_WithInvalidData_ThrowsException() {
 
-        var invalidUser = UserConstants.getInValidRegisterRequestDTO();
+        var invalidUser = UserConstants.getInvalidRegisterRequestDTO();
 
         assertThatThrownBy(() -> service.register(invalidUser)).isInstanceOf(RuntimeException.class);
     }

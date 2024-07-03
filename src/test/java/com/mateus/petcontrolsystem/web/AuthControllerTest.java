@@ -1,21 +1,26 @@
 package com.mateus.petcontrolsystem.web;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mateus.petcontrolsystem.common.UserConstants;
 import com.mateus.petcontrolsystem.dto.LoginRequestDTO;
 import com.mateus.petcontrolsystem.dto.LoginResponseDTO;
+import com.mateus.petcontrolsystem.dto.RegisterRequestDTO;
 import com.mateus.petcontrolsystem.services.PasswordRecoveryService;
 import com.mateus.petcontrolsystem.services.UserService;
 import com.mateus.petcontrolsystem.services.exceptions.InvalidPasswordException;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,6 +28,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.stream.Stream;
+
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest
 @AutoConfigureMockMvc
 public class AuthControllerTest {
@@ -111,5 +119,31 @@ public class AuthControllerTest {
                     .content(mapper.writeValueAsString(validBody))
                     .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void register_WithValidData_Returns201Created() throws Exception {
+
+        var validBodyRequest = UserConstants.getValidRegisterRequestDTO();
+
+        doNothing().when(userService).register(validBodyRequest);
+
+        mockMvc.perform(post("/auth/register")
+                        .content(mapper.writeValueAsString(validBodyRequest)).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is(201));
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideInvalidRequests")
+    public void register_WithInvalidData_ReturnsBadRequest(RegisterRequestDTO request) throws Exception {
+
+        mockMvc.perform(post("/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest());
+    }
+
+    public static Stream<Arguments> provideInvalidRequests() {
+        return UserConstants.provideInvalidRegisterRequestDTO();
     }
 }
