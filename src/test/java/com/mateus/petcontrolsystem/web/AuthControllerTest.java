@@ -134,7 +134,7 @@ public class AuthControllerTest {
     }
 
     @ParameterizedTest
-    @MethodSource("provideInvalidRequests")
+    @MethodSource("provideInvalidRegisterRequestDTO")
     public void register_WithInvalidData_ReturnsBadRequest(RegisterRequestDTO request) throws Exception {
 
         mockMvc.perform(post("/auth/register")
@@ -143,7 +143,7 @@ public class AuthControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
-    public static Stream<Arguments> provideInvalidRequests() {
+    public static Stream<Arguments> provideInvalidRegisterRequestDTO() {
         return UserConstants.provideInvalidRegisterRequestDTO();
     }
 }
