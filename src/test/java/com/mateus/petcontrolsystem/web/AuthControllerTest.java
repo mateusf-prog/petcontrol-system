@@ -1,12 +1,12 @@
 package com.mateus.petcontrolsystem.web;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mateus.petcontrolsystem.common.UserConstants;
 import com.mateus.petcontrolsystem.dto.LoginRequestDTO;
@@ -14,6 +14,7 @@ import com.mateus.petcontrolsystem.dto.LoginResponseDTO;
 import com.mateus.petcontrolsystem.dto.RegisterRequestDTO;
 import com.mateus.petcontrolsystem.services.PasswordRecoveryService;
 import com.mateus.petcontrolsystem.services.UserService;
+import com.mateus.petcontrolsystem.services.exceptions.EntityAlreadyExistsException;
 import com.mateus.petcontrolsystem.services.exceptions.InvalidPasswordException;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
@@ -121,6 +122,22 @@ public class AuthControllerTest {
                         .content(mapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest());
     }
+
+    @Test
+    public void register_WithExistingEmailOrCpfCnpj_ReturnsConflict() throws Exception {
+
+        var validUser = UserConstants.getValidRegisterRequestDTO();
+
+        doThrow(EntityAlreadyExistsException.class).when(userService).register(validUser);
+
+        mockMvc.perform(post("/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(validUser)))
+                .andExpect(status().isConflict());
+    }
+
+    // todo: implement other tests (recovery password, confirm code, set new password
+
 
     public static Stream<Arguments> provideInvalidRegisterRequestDTO() {
         return UserConstants.provideInvalidRegisterRequestDTO();
