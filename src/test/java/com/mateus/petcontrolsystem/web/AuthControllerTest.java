@@ -61,34 +61,13 @@ public class AuthControllerTest {
                 .andExpect(jsonPath("$.token").value(expectedResponse.token()));
     }
 
-    @Test
-    public void login_WithInvalidData_ReturnsBadRequest() throws Exception {
-        var emptyData = new LoginRequestDTO("", "");
-        var nullData = new LoginRequestDTO(null, null);
-        var invalidEmail = new LoginRequestDTO("invalidemailpattern", "Password1234");
-        var invalidPassword = new LoginRequestDTO("validemail@email.com", "invalidpasswordpattern");
+    @ParameterizedTest
+    @MethodSource("provideInvalidLoginRequestDTO")
+    public void login_WithInvalidData_ReturnsBadRequest(LoginRequestDTO body) throws Exception {
 
         mockMvc.perform(
                 post("/auth/login")
-                    .content(mapper.writeValueAsString(emptyData))
-                    .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
-
-        mockMvc.perform(
-                post("/auth/login")
-                    .content(mapper.writeValueAsString(nullData))
-                    .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
-
-        mockMvc.perform(
-                post("/auth/login")
-                    .content(mapper.writeValueAsString(invalidEmail))
-                    .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
-
-        mockMvc.perform(
-                post("/auth/login")
-                    .content(mapper.writeValueAsString(invalidPassword))
+                    .content(mapper.writeValueAsString(body))
                     .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
@@ -145,5 +124,9 @@ public class AuthControllerTest {
 
     public static Stream<Arguments> provideInvalidRegisterRequestDTO() {
         return UserConstants.provideInvalidRegisterRequestDTO();
+    }
+
+    public static Stream<Arguments> provideInvalidLoginRequestDTO() {
+        return UserConstants.provideInvalidLoginRequestDTO();
     }
 }

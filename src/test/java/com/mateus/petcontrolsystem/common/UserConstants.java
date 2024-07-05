@@ -58,6 +58,7 @@ public class UserConstants {
 
 
     // these objects are used in AuthControllerTest
+
     public static Stream<Arguments> provideInvalidUserUpdateDTO() {
         return Stream.of(
                 Arguments.of(new UpdateUserDTO(null, "12991978448", "50108953076",
