@@ -1,3 +1,17 @@
 package com.mateus.petcontrolsystem.dto;
 
-public record UserAccessDataRequestDTO (String email, String actualPassword, String newPassword) {}
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+
+public record UserAccessDataRequestDTO (
+
+        @NotBlank(message = "Email cannot be null")
+        @Email(message = "Invalid Email")
+        String email,
+        @NotBlank(message = "Password cannot be white or null ")
+        String actualPassword,
+        @NotBlank(message = "Password cannot be white or null ")
+        @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}$", message = "Password must have at least 8 characters, " +
+                "one uppercase letter, one lowercase letter and one number. Ex: Password123")
+        String newPassword) {}
