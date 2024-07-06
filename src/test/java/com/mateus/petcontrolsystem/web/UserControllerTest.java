@@ -1,6 +1,5 @@
 package com.mateus.petcontrolsystem.web;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mateus.petcontrolsystem.common.UserConstants;
 import com.mateus.petcontrolsystem.dto.UpdateUserDTO;
@@ -8,6 +7,7 @@ import com.mateus.petcontrolsystem.dto.UserAccessDataRequestDTO;
 import com.mateus.petcontrolsystem.dto.UserAccessDataResponseDTO;
 import com.mateus.petcontrolsystem.services.UserService;
 import com.mateus.petcontrolsystem.services.exceptions.EntityAlreadyExistsException;
+import com.mateus.petcontrolsystem.services.exceptions.InvalidPasswordException;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -34,6 +34,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 public class UserControllerTest {
+
+    private static final long ANY_VALUE_ID_REQUEST = 5L;
 
     @Autowired
     private MockMvc mockMvc;
@@ -84,12 +86,11 @@ public class UserControllerTest {
     public void updateAccessData_WithValidData_Returns200() throws Exception {
 
         var validBody = UserConstants.getValidUserAccessDataRequestDTO();
-        var validId = 3L;
         var expectedResponse = new UserAccessDataResponseDTO("email@hotmail.com");
 
-        when(userService.updateAccessData(validBody, validId)).thenReturn(expectedResponse);
+        when(userService.updateAccessData(validBody, ANY_VALUE_ID_REQUEST)).thenReturn(expectedResponse);
 
-        mockMvc.perform(patch("/users/{id}", validId)
+        mockMvc.perform(patch("/users/{id}", ANY_VALUE_ID_REQUEST)
                         .content(mapper.writeValueAsString(validBody))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(200));
@@ -99,9 +100,7 @@ public class UserControllerTest {
     @MethodSource("provideInvalidUserAccessDataRequestDTO")
     public void updateAccessData_WithInvalidData_ReturnsBadRequest(UserAccessDataRequestDTO body) throws Exception {
 
-        var validId = 3L;
-
-        mockMvc.perform(patch("/users/{id}", validId)
+        mockMvc.perform(patch("/users/{id}", ANY_VALUE_ID_REQUEST)
                         .content(mapper.writeValueAsString(body))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
@@ -111,10 +110,9 @@ public class UserControllerTest {
     public void updateAccessData_WithInvalidIdValue_ReturnsNotFound() throws Exception {
 
         var validBody = UserConstants.getValidUserAccessDataRequestDTO();
-        var anyId = 9L;
 
-        when(userService.updateAccessData(validBody, anyId)).thenThrow(EntityNotFoundException.class);
-        mockMvc.perform(patch("/users/{id}", anyId)
+        when(userService.updateAccessData(validBody, ANY_VALUE_ID_REQUEST)).thenThrow(EntityNotFoundException.class);
+        mockMvc.perform(patch("/users/{id}", ANY_VALUE_ID_REQUEST)
                         .content(mapper.writeValueAsString(validBody))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
@@ -124,18 +122,26 @@ public class UserControllerTest {
     public void updateAccessData_WithEmailAlreadyInUse_ReturnsConflict() throws Exception {
 
         var validBody = UserConstants.getValidUserAccessDataRequestDTO();
-        var anyId = 9L;
 
-        when(userService.updateAccessData(validBody, anyId)).thenThrow(EntityAlreadyExistsException.class);
+        when(userService.updateAccessData(validBody, ANY_VALUE_ID_REQUEST)).thenThrow(EntityAlreadyExistsException.class);
 
-        mockMvc.perform(patch("/users/{id}", anyId)
+        mockMvc.perform(patch("/users/{id}", ANY_VALUE_ID_REQUEST)
                         .content(mapper.writeValueAsString(validBody))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isConflict());
     }
 
-    public void updateAccessData_WithOldPasswordInvalid_() {
-        //todo implement and rename
+    @Test
+    public void updateAccessData_WithOldPasswordInvalid_ReturnsBadRequest() throws Exception {
+
+        var validBody = UserConstants.getValidUserAccessDataRequestDTO();
+
+        when(userService.updateAccessData(validBody, ANY_VALUE_ID_REQUEST)).thenThrow(InvalidPasswordException.class);
+
+        mockMvc.perform(patch("/users/{id}", ANY_VALUE_ID_REQUEST)
+                        .content(mapper.writeValueAsString(validBody))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
     }
 
 
