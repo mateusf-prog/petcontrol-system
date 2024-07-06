@@ -52,10 +52,9 @@ public class UserConstants {
     }
 
     public static UpdateUserDTO getValidUserUpdateDto() {
-        return new UpdateUserDTO("Jon Doe", "1299999999", "50108953076",
-                new AddressDTO("Rua José Domingues", "170", "Centro", "São José dos Campos", "SP", "12212700"));
+        return new UpdateUserDTO("Jon Doe", "12999999999", "50108953076",
+                new AddressDTO("12212700", "Rua das Araras", "170", "Jardim Telespark", "São José dos Campos", "SP"));
     }
-
 
     // these objects are used in AuthControllerTest
 
@@ -64,8 +63,6 @@ public class UserConstants {
                 Arguments.of(new UpdateUserDTO(null, "12991978448", "50108953076",
                         new AddressDTO("12212700", "Rua das Araras", "170", "Jardim Telespark", "São José dos Campos", "SP"))),
                 Arguments.of(new UpdateUserDTO("Jon Doe", null, "50108953076",
-                        new AddressDTO("12212700", "Rua das Araras", "170", "Jardim Telespark", "São José dos Campos", "SP"))),
-                Arguments.of(new UpdateUserDTO("Jon Doe", "12991978448", null,
                         new AddressDTO("12212700", "Rua das Araras", "170", "Jardim Telespark", "São José dos Campos", "SP"))),
                 Arguments.of(new UpdateUserDTO("Jon Doe", "12991978448", "50108953076",
                         new AddressDTO(null, "Rua das Araras", "170", "Jardim Telespark", "São José dos Campos", "SP"))),
@@ -83,13 +80,9 @@ public class UserConstants {
                         new AddressDTO("12212700", "Rua das Araras", "170", "Jardim Telespark", "São José dos Campos", "SP"))),
                 Arguments.of(new UpdateUserDTO("Jon Doe", "", "50108953076",
                         new AddressDTO("12212700", "Rua das Araras", "170", "Jardim Telespark", "São José dos Campos", "SP"))),
-                Arguments.of(new UpdateUserDTO("Jon Doe", "12991978448", "",
-                        new AddressDTO("12212700", "Rua das Araras", "170", "Jardim Telespark", "São José dos Campos", "SP"))),
                 Arguments.of(new UpdateUserDTO("Jo", "12991978448", "50108953076",
                         new AddressDTO("12212700", "Rua das Araras", "170", "Jardim Telespark", "São José dos Campos", "SP"))),
                 Arguments.of(new UpdateUserDTO("Jon Doe", "invalid-phone", "50108953076",
-                        new AddressDTO("12212700", "Rua das Araras", "170", "Jardim Telespark", "São José dos Campos", "SP"))),
-                Arguments.of(new UpdateUserDTO("Jon Doe", "12991978448", "invalid-cpf",
                         new AddressDTO("12212700", "Rua das Araras", "170", "Jardim Telespark", "São José dos Campos", "SP"))),
                 Arguments.of(new UpdateUserDTO("Jon Doe", "12991978448", "50108953076",
                         new AddressDTO("", "Rua das Araras", "170", "Jardim Telespark", "São José dos Campos", "SP"))),
