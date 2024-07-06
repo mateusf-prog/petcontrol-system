@@ -25,7 +25,7 @@ public class UserController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<UserAccessDataResponseDTO> updateAccessData(
-            @RequestBody UserAccessDataRequestDTO body, @PathVariable Long id) {
+            @RequestBody @Valid UserAccessDataRequestDTO body, @PathVariable Long id) {
         UserAccessDataResponseDTO entity = service.updateAccessData(body, id);
         return ResponseEntity.ok(entity);
     }
