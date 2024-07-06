@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mateus.petcontrolsystem.common.UserConstants;
 import com.mateus.petcontrolsystem.dto.UpdateUserDTO;
 import com.mateus.petcontrolsystem.services.UserService;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -51,7 +52,7 @@ public class UserControllerTest {
     }
 
     @ParameterizedTest
-    @MethodSource("provideInvalidUpdateUserDTO")
+    @MethodSource("provideInvalidUserUpdateDTO")
     public void update_WithInvalidData_ReturnsBadRequest(UpdateUserDTO body) throws Exception {
 
         mockMvc.perform(put("/users")
@@ -59,7 +60,19 @@ public class UserControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
-    public Stream<Arguments> provideInvalidUpdateUserDTO () {
+    @Test
+    public void update_WithNonExistingUser_ReturnsNotFound() throws Exception {
+
+        var validUser = UserConstants.getValidUserUpdateDto();
+
+        when(userService.update(validUser)).thenThrow(EntityNotFoundException.class);
+
+        mockMvc.perform(put("/users")
+                        .content(mapper.writeValueAsString(validUser)).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+    public Stream<Arguments> provideInvalidUserUpdateDTO () {
         return UserConstants.provideInvalidUserUpdateDTO();
     }
 }
