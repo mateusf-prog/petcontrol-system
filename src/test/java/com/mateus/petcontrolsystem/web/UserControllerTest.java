@@ -7,6 +7,7 @@ import com.mateus.petcontrolsystem.dto.UpdateUserDTO;
 import com.mateus.petcontrolsystem.dto.UserAccessDataRequestDTO;
 import com.mateus.petcontrolsystem.dto.UserAccessDataResponseDTO;
 import com.mateus.petcontrolsystem.services.UserService;
+import com.mateus.petcontrolsystem.services.exceptions.EntityAlreadyExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -106,12 +107,31 @@ public class UserControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
-    public void updateAccessData_WithInvalidId_() {
-        //todo implement and rename
+    @Test
+    public void updateAccessData_WithInvalidIdValue_ReturnsNotFound() throws Exception {
+
+        var validBody = UserConstants.getValidUserAccessDataRequestDTO();
+        var anyId = 9L;
+
+        when(userService.updateAccessData(validBody, anyId)).thenThrow(EntityNotFoundException.class);
+        mockMvc.perform(patch("/users/{id}", anyId)
+                        .content(mapper.writeValueAsString(validBody))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 
-    public void updateAccessData_WithEmailAlreadyInUse_() {
-        //todo implement and rename
+    @Test
+    public void updateAccessData_WithEmailAlreadyInUse_ReturnsConflict() throws Exception {
+
+        var validBody = UserConstants.getValidUserAccessDataRequestDTO();
+        var anyId = 9L;
+
+        when(userService.updateAccessData(validBody, anyId)).thenThrow(EntityAlreadyExistsException.class);
+
+        mockMvc.perform(patch("/users/{id}", anyId)
+                        .content(mapper.writeValueAsString(validBody))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isConflict());
     }
 
     public void updateAccessData_WithOldPasswordInvalid_() {
