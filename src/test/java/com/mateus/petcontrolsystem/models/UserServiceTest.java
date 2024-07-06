@@ -174,7 +174,7 @@ public class UserServiceTest {
     @Test
     public void updateAccessData_WithValidData_ReturnsUserAccessDataResponseDTO() {
 
-        var validUserAccessData = UserConstants.getValidUserAccessDataDTO();
+        var validUserAccessData = UserConstants.getValidUserAccessDataRequestDTO();
         var validEntity = UserConstants.getValidUser();
         var expectedResponse = new UserAccessDataResponseDTO(validUserAccessData.email());
 
@@ -193,7 +193,7 @@ public class UserServiceTest {
     @Test
     public void updateAccessData_WithAlreadyExistsEmail_ThrowsException() {
 
-        var validUserAccessData = UserConstants.getValidUserAccessDataDTO();
+        var validUserAccessData = UserConstants.getValidUserAccessDataRequestDTO();
 
         // the value of id is irrelevant for this case
         when(repository.findByEmail(validUserAccessData.email())).thenReturn(Optional.of(new User()));
@@ -204,7 +204,7 @@ public class UserServiceTest {
     @Test
     public void updateAccessData_WithNotExistsUserById_ThrowsException() {
 
-        var validUserAccessData = UserConstants.getValidUserAccessDataDTO();
+        var validUserAccessData = UserConstants.getValidUserAccessDataRequestDTO();
 
         // the value of id is irrelevant for this case
         when(repository.findByEmail(validUserAccessData.email())).thenReturn(Optional.empty());
@@ -216,7 +216,7 @@ public class UserServiceTest {
     @Test
     public void updateAccessData_WithInvalidOldPassword_ThrowsException() {
 
-        var validUserAccessData = UserConstants.getValidUserAccessDataDTO();
+        var validUserAccessData = UserConstants.getValidUserAccessDataRequestDTO();
         var validEntity = UserConstants.getValidUser();
 
         // the value of id is irrelevant for this case
