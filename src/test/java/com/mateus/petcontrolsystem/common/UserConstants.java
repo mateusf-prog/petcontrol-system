@@ -41,7 +41,7 @@ public class UserConstants {
         return new LoginRequestDTO("jon.doe@hotmail.com", "Password1234");
     }
 
-    public static UserAccessDataRequestDTO getValidUserAccessDataDTO() {
+    public static UserAccessDataRequestDTO getValidUserAccessDataRequestDTO() {
         return new UserAccessDataRequestDTO("jon.doe@hotmail.com", "Password1234", "NewPassword4321");
     }
 
@@ -115,15 +115,23 @@ public class UserConstants {
 
     public static Stream<Arguments> provideInvalidUserAccessDataRequestDTO() {
         return Stream.of(
-                Arguments.of(new UserAccessDataRequestDTO(null, "Password@1234", "Password@1234")),
-                Arguments.of(new UserAccessDataRequestDTO("jon.doe@hotmail.com", null, "Password@1234")),
+                Arguments.of(new UserAccessDataRequestDTO("jondoehotmail.com", "Password@1234", "Password@1234")),
+                Arguments.of(new UserAccessDataRequestDTO("jon.doe@.com", "Password@1234", "Password@1234")),
+                Arguments.of(new UserAccessDataRequestDTO("jon.doe@@hotmail.com", "Password@1234", "Password@1234")),
+                Arguments.of(new UserAccessDataRequestDTO("jon.doe@hot mail.com", "Password@1234", "Password@1234")),
+                Arguments.of(new UserAccessDataRequestDTO("jon.doe@hotmail..com", "Password@1234", "Password@1234")),
+                Arguments.of(new UserAccessDataRequestDTO("jon.doe@hot<mail>.com", "Password@1234", "Password@1234")),
+                Arguments.of(new UserAccessDataRequestDTO("jon.doe@hotmail.com", "Pass12!", "Pass12!")),
+                Arguments.of(new UserAccessDataRequestDTO("jon.doe@hotmail.com", "Pas@34", "Pas@34")),
+                Arguments.of(new UserAccessDataRequestDTO("jon.doe@hotmail.com", "password@1234", "password@1234")),
+                Arguments.of(new UserAccessDataRequestDTO("jon.doe@hotmail.com", "PASSWORD@1234", "PASSWORD@1234")),
+                Arguments.of(new UserAccessDataRequestDTO("jon.doe@hotmail.com", "Password@", "Password@")),
                 Arguments.of(new UserAccessDataRequestDTO("jon.doe@hotmail.com", "Password@1234", null)),
+                Arguments.of(new UserAccessDataRequestDTO("jon.doe@hotmail.com", null, "Password@1234")),
+                Arguments.of(new UserAccessDataRequestDTO("", "", "")),
                 Arguments.of(new UserAccessDataRequestDTO("", "Password@1234", "Password@1234")),
                 Arguments.of(new UserAccessDataRequestDTO("jon.doe@hotmail.com", "", "Password@1234")),
-                Arguments.of(new UserAccessDataRequestDTO("jon.doe@hotmail.com", "Password@1234", "")),
-                Arguments.of(new UserAccessDataRequestDTO("invalid-email", "Password@1234", "Password@1234")),
-                Arguments.of(new UserAccessDataRequestDTO("jon.doe@hotmail.com", "invalidpasswordpattern", "Password@1234")),
-                Arguments.of(new UserAccessDataRequestDTO("jon.doe@hotmail.com","Password@1234", "invalidpasswordpattern"))
+                Arguments.of(new UserAccessDataRequestDTO("jon.doe@hotmail.com", "Password@1234", ""))
         );
     }
 
