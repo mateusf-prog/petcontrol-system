@@ -29,7 +29,6 @@ public class PasswordRecoveryService {
     private final PasswordRecoveryRepository repository;
     private final UserRepository userRepository;
     private final TokenService tokenService;
-    private final UserService userService;
     private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
 
@@ -47,7 +46,7 @@ public class PasswordRecoveryService {
         passwordRecovery.setCodeCreatedAt(LocalDateTime.now().toInstant(ZoneOffset.of("-3")));
         repository.save(passwordRecovery);
 
-        emailService.sendCodeToEmail(randomCode, user.getEmail());
+        emailService.sendCodeToEmail(randomCode, body.email());
     }
 
     @Transactional
@@ -81,7 +80,7 @@ public class PasswordRecoveryService {
         return new EmailToRecoverPasswordDTO(user.getEmail());
     }
 
-    private String generateCodeToSendToEmail() {
+    public String generateCodeToSendToEmail() {
         var CODE_LENGTH = 5;
         Random random = new Random();
         StringBuilder code = new StringBuilder(CODE_LENGTH);

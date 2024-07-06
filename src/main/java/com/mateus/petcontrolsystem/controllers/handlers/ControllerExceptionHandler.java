@@ -8,6 +8,9 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailAuthenticationException;
+import org.springframework.mail.MailPreparationException;
+import org.springframework.mail.MailSendException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -85,6 +88,27 @@ public class ControllerExceptionHandler {
         HttpStatus status = HttpStatus.BAD_REQUEST;
         String errorMessage = e.getBindingResult().getFieldError().getDefaultMessage();
         StandardError err = new StandardError(Instant.now(), status.value(), errorMessage, request.getRequestURI());
+        return ResponseEntity.status(status.value()).body(err);
+    }
+
+    @ExceptionHandler(MailSendException.class)
+    public ResponseEntity<StandardError> mailSendException (MailSendException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+        StandardError err = new StandardError(Instant.now(), status.value(), e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(status.value()).body(err);
+    }
+
+    @ExceptionHandler(MailAuthenticationException.class)
+    public ResponseEntity<StandardError> mailAuthenticateException (MailAuthenticationException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+        StandardError err = new StandardError(Instant.now(), status.value(), e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(status.value()).body(err);
+    }
+
+    @ExceptionHandler(MailPreparationException.class)
+    public ResponseEntity<StandardError> mailPreparationException (MailPreparationException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+        StandardError err = new StandardError(Instant.now(), status.value(), e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(status.value()).body(err);
     }
 }

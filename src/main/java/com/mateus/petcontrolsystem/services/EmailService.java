@@ -1,7 +1,8 @@
 package com.mateus.petcontrolsystem.services;
 
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.*;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,14 @@ public class EmailService {
         emailToSend.setSubject("Código de verificação - PetControl System");
         emailToSend.setText(message);
 
-        mailSender.send(emailToSend);
+        try {
+            mailSender.send(emailToSend);
+        } catch (MailSendException e) {
+            throw new MailSendException("ERROR SENDING EMAIL CODE");
+        } catch (MailAuthenticationException e) {
+            throw new MailAuthenticationException("ERROR AUTHENTICATE MAIL SERVER");
+        } catch (MailPreparationException e) {
+            throw new MailPreparationException("ERROR DURING PREPARATION EMAIL MESSAGE");
+        }
     }
 }
