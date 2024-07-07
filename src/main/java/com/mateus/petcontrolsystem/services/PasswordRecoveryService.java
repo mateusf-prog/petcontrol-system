@@ -11,6 +11,7 @@ import com.mateus.petcontrolsystem.repositories.PasswordRecoveryRepository;
 import com.mateus.petcontrolsystem.repositories.UserRepository;
 import com.mateus.petcontrolsystem.services.exceptions.ExpiredCodeException;
 import com.mateus.petcontrolsystem.services.exceptions.InvalidCodeException;
+import com.mateus.petcontrolsystem.services.exceptions.InvalidProcessRecoveryPasswordException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -56,7 +57,7 @@ public class PasswordRecoveryService {
                 () -> new EntityNotFoundException("USER NOT FOUND"));
 
         Optional<PasswordRecovery> existingPasswordRecovery = Optional.ofNullable(repository.findByUserEmail(user.getEmail()).orElseThrow(
-                () -> new EntityNotFoundException("INVALID REQUEST")
+                () -> new InvalidProcessRecoveryPasswordException("INVALID REQUEST")
         ));
         validateCodeReceived(body, existingPasswordRecovery.get());
 
@@ -93,7 +94,7 @@ public class PasswordRecoveryService {
         return code.toString();
     }
 
-    private void validateCodeReceived(CodeReceivedInEmailRequestDTO body, PasswordRecovery passwordRecovery) {
+    public void validateCodeReceived(CodeReceivedInEmailRequestDTO body, PasswordRecovery passwordRecovery) {
         if (passwordRecovery.getRecoveryCode() == null)
             throw new InvalidCodeException("INVALID REQUEST");
         if (!passwordRecovery.getRecoveryCode().equals(body.code()))
