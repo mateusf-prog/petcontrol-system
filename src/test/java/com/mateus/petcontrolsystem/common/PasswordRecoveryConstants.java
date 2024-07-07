@@ -1,5 +1,6 @@
 package com.mateus.petcontrolsystem.common;
 
+import com.mateus.petcontrolsystem.dto.password.CodeReceivedInEmailRequestDTO;
 import com.mateus.petcontrolsystem.dto.password.EmailToRecoverPasswordDTO;
 import com.mateus.petcontrolsystem.models.PasswordRecovery;
 
@@ -17,5 +18,13 @@ public class PasswordRecoveryConstants {
         entity.setUserEmail("jon.doe@hotmail.com");
         entity.setCodeCreatedAt(Instant.now());
         return entity;
+    }
+
+    public static EmailToRecoverPasswordDTO getInvalidEmailToRecoverPasswordDTO() {
+        return new EmailToRecoverPasswordDTO("");
+    }
+
+    public static CodeReceivedInEmailRequestDTO getValidCodeReceivedEmailRequestDTO() {
+        return new CodeReceivedInEmailRequestDTO("jon.doe@email.com", "12345");
     }
 }
