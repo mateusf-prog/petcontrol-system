@@ -8,10 +8,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mateus.petcontrolsystem.common.PasswordRecoveryConstants;
 import com.mateus.petcontrolsystem.common.UserConstants;
 import com.mateus.petcontrolsystem.dto.LoginRequestDTO;
 import com.mateus.petcontrolsystem.dto.LoginResponseDTO;
 import com.mateus.petcontrolsystem.dto.RegisterRequestDTO;
+import com.mateus.petcontrolsystem.dto.password.EmailToRecoverPasswordDTO;
 import com.mateus.petcontrolsystem.services.PasswordRecoveryService;
 import com.mateus.petcontrolsystem.services.UserService;
 import com.mateus.petcontrolsystem.services.exceptions.EntityAlreadyExistsException;
@@ -136,7 +138,16 @@ public class AuthControllerTest {
                 .andExpect(status().isConflict());
     }
 
-    // todo: implement other tests (recovery password, confirm code, set new password
+    @Test
+    public void passwordRecover_WithValidData_Returns200Ok() throws Exception {
+
+        var validBody = PasswordRecoveryConstants.getValidEmailToRecoverPasswordDTO();
+
+        mockMvc.perform(post("/auth/passwordRecover")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(validBody)))
+                .andExpect(status().isOk());
+    }
 
 
     public static Stream<Arguments> provideInvalidRegisterRequestDTO() {
