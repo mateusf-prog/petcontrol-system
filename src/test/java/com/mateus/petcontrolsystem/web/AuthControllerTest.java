@@ -13,6 +13,8 @@ import com.mateus.petcontrolsystem.common.UserConstants;
 import com.mateus.petcontrolsystem.dto.LoginRequestDTO;
 import com.mateus.petcontrolsystem.dto.LoginResponseDTO;
 import com.mateus.petcontrolsystem.dto.RegisterRequestDTO;
+import com.mateus.petcontrolsystem.dto.password.CodeReceivedEmailResponseDTO;
+import com.mateus.petcontrolsystem.dto.password.CodeReceivedInEmailRequestDTO;
 import com.mateus.petcontrolsystem.dto.password.EmailToRecoverPasswordDTO;
 import com.mateus.petcontrolsystem.services.PasswordRecoveryService;
 import com.mateus.petcontrolsystem.services.UserService;
@@ -72,7 +74,7 @@ public class AuthControllerTest {
                 post("/auth/login")
                     .content(mapper.writeValueAsString(body))
                     .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().is(400));
     }
 
     @Test
@@ -86,7 +88,7 @@ public class AuthControllerTest {
                 post("/auth/login")
                     .content(mapper.writeValueAsString(body))
                     .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
+                .andExpect(status().is(404));
     }
 
     @Test
@@ -100,7 +102,7 @@ public class AuthControllerTest {
                 post("/auth/login")
                     .content(mapper.writeValueAsString(validBody))
                     .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().is(400));
     }
 
     @Test
@@ -122,7 +124,7 @@ public class AuthControllerTest {
         mockMvc.perform(post("/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().is(400));
     }
 
     @Test
@@ -135,7 +137,7 @@ public class AuthControllerTest {
         mockMvc.perform(post("/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(validUser)))
-                .andExpect(status().isConflict());
+                .andExpect(status().is(409));
     }
 
     @Test
@@ -146,7 +148,20 @@ public class AuthControllerTest {
         mockMvc.perform(post("/auth/passwordRecover")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(validBody)))
-                .andExpect(status().isOk());
+                .andExpect(status().is(200));
+    }
+
+    @Test
+    public void sendCodeToEmail_WithNonExistingUser_ReturnsNotFound() throws Exception{
+
+        var body = PasswordRecoveryConstants.getValidEmailToRecoverPasswordDTO();
+
+        doThrow(EntityNotFoundException.class).when(passwordRecoveryService).sendCodeToEmail(body);
+
+        mockMvc.perform(post("/auth/passwordRecover")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(body)))
+                .andExpect(status().is(404));
     }
 
     @ParameterizedTest
@@ -156,10 +171,38 @@ public class AuthControllerTest {
         mockMvc.perform(post("/auth/passwordRecover")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(body)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().is(400));
+    }
+
+    @Test
+    public void validateCodeReceivedInEmail_WithValidBody_Returns200OK() throws Exception{
+
+        var body = PasswordRecoveryConstants.getValidCodeReceivedEmailRequestDTO();
+        var expectedResponse = new CodeReceivedEmailResponseDTO("generated-token");
+
+        when(passwordRecoveryService.validateCodeReceivedInEmail(body)).thenReturn(expectedResponse);
+
+        mockMvc.perform(post("/auth/confirmCode")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(body)))
+                .andExpect(status().is(200))
+                .andExpect(jsonPath("$.token").value(expectedResponse.token()));
     }
 
 
+    @ParameterizedTest
+    @MethodSource("provideInvalidCodeReceivedEmailRequestDTO")
+    public void validateCodeReceivedInEmail_WithInvalidBody_ReturnsBadRequest(CodeReceivedInEmailRequestDTO body) throws Exception{
+
+        mockMvc.perform(post("/auth/confirmCode")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(body)))
+                .andExpect(status().is(400));
+    }
+
+    public static Stream<Arguments> provideInvalidCodeReceivedEmailRequestDTO() {
+        return PasswordRecoveryConstants.provideInvalidCodeReceivedEmailRequestDTO();
+    }
     public static Stream<Arguments> provideInvalidEmailToRecoverPasswordDTO() {
         return PasswordRecoveryConstants.provideInvalidEmailToRecoverPasswordDTO();
     }
