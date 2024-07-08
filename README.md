@@ -45,7 +45,7 @@ O sistema contempla a arquitetura em camadas contendo as seguintes camadas:
 A parte de segurança da aplicação conta com a criação de tokens JWT. Todas as requisições passam por um filtro personalizado onde esse filtro trata os tokens.
 
 <img src="images/tokens.png" alt="Captura de tela 1" width="400"/>
-<img src="images/security-filter.png" alt="Captura de tela 1" width="1000" height="400"/>
+<img src="images/security-filter.png" alt="Captura de tela 1" width="1200" height="500"/>
 
 Os únicos endpoints que são públicos, são:
 
@@ -70,7 +70,11 @@ Este projeto utiliza JUnit 5 para os testes unitários e testes de integração.
 Para executar os testes, você pode usar o seguinte comando no terminal:
 
 ```bash
-mvn test
+mvn test 
+```
+ou diretamente na pasta raiz do projeto com o comando:
+```bash
+./mvnw test
 ```
 
 ## Instalação 
