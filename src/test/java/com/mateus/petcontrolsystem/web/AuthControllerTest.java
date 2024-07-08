@@ -139,7 +139,7 @@ public class AuthControllerTest {
     }
 
     @Test
-    public void passwordRecover_WithValidData_Returns200Ok() throws Exception {
+    public void sendCodeToEmail_WithValidData_Returns200Ok() throws Exception {
 
         var validBody = PasswordRecoveryConstants.getValidEmailToRecoverPasswordDTO();
 
@@ -149,6 +149,20 @@ public class AuthControllerTest {
                 .andExpect(status().isOk());
     }
 
+    @ParameterizedTest
+    @MethodSource("provideInvalidEmailToRecoverPasswordDTO")
+    public void sendCodeToEmail_WithInvalidData_Returns200Ok(EmailToRecoverPasswordDTO body) throws Exception {
+
+        mockMvc.perform(post("/auth/passwordRecover")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(body)))
+                .andExpect(status().isBadRequest());
+    }
+
+
+    public static Stream<Arguments> provideInvalidEmailToRecoverPasswordDTO() {
+        return PasswordRecoveryConstants.provideInvalidEmailToRecoverPasswordDTO();
+    }
 
     public static Stream<Arguments> provideInvalidRegisterRequestDTO() {
         return UserConstants.provideInvalidRegisterRequestDTO();
