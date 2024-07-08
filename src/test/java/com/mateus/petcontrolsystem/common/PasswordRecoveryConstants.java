@@ -4,8 +4,10 @@ import com.mateus.petcontrolsystem.dto.password.CodeReceivedInEmailRequestDTO;
 import com.mateus.petcontrolsystem.dto.password.EmailToRecoverPasswordDTO;
 import com.mateus.petcontrolsystem.dto.password.NewPasswordToRecoveryAccountDTO;
 import com.mateus.petcontrolsystem.models.PasswordRecovery;
+import org.junit.jupiter.params.provider.Arguments;
 
 import java.time.Instant;
+import java.util.stream.Stream;
 
 public class PasswordRecoveryConstants {
 
@@ -33,4 +35,10 @@ public class PasswordRecoveryConstants {
         return new NewPasswordToRecoveryAccountDTO("jon.doe@hotmail.com", "Newpassword@12345");
     }
 
+    public static Stream<Arguments> provideInvalidEmailToRecoverPasswordDTO() {
+        return Stream.of(
+                Arguments.of(new EmailToRecoverPasswordDTO("")),
+                Arguments.of(new EmailToRecoverPasswordDTO("invalid-email")),
+                Arguments.of(new EmailToRecoverPasswordDTO(null)));
+    }
 }
