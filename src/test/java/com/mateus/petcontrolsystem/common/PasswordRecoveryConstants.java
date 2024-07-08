@@ -56,4 +56,17 @@ public class PasswordRecoveryConstants {
                 Arguments.of(new CodeReceivedInEmailRequestDTO("jon.doe@email.com", "!@#$%")),
                 Arguments.of(new CodeReceivedInEmailRequestDTO(" jon.doe@email.com ", "12345")));
     }
+
+    public static Stream<Arguments> provideNewPasswordToRecoveryAccountDTO() {
+        return Stream.of(
+                Arguments.of(new NewPasswordToRecoveryAccountDTO("jon.doe@email.com", "")),
+                Arguments.of(new NewPasswordToRecoveryAccountDTO("jon.doe@email.com", null)),
+                Arguments.of(new NewPasswordToRecoveryAccountDTO("", "Password1234")),
+                Arguments.of(new NewPasswordToRecoveryAccountDTO(null, "Password1234")),
+                Arguments.of(new NewPasswordToRecoveryAccountDTO("", "")),
+                Arguments.of(new NewPasswordToRecoveryAccountDTO(null, null)),
+                Arguments.of(new NewPasswordToRecoveryAccountDTO("invalid-email", "Password1234")),
+                Arguments.of(new NewPasswordToRecoveryAccountDTO("jon.doe@email.com", "password")),
+                Arguments.of(new NewPasswordToRecoveryAccountDTO(" jon.doe@email.com ", "Password1234")));
+    }
 }
