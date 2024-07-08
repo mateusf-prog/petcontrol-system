@@ -41,4 +41,19 @@ public class PasswordRecoveryConstants {
                 Arguments.of(new EmailToRecoverPasswordDTO("invalid-email")),
                 Arguments.of(new EmailToRecoverPasswordDTO(null)));
     }
+
+    // in this case, the email will come implicit together body request, but it will be tested even so
+    public static Stream<Arguments> provideInvalidCodeReceivedEmailRequestDTO() {
+        return Stream.of(
+                Arguments.of(new CodeReceivedInEmailRequestDTO("jon.doe@email.com", "")),
+                Arguments.of(new CodeReceivedInEmailRequestDTO("jon.doe@email.com", null)),
+                Arguments.of(new CodeReceivedInEmailRequestDTO("", "12345")),
+                Arguments.of(new CodeReceivedInEmailRequestDTO(null, "12345")),
+                Arguments.of(new CodeReceivedInEmailRequestDTO("", "")),
+                Arguments.of(new CodeReceivedInEmailRequestDTO(null, null)),
+                Arguments.of(new CodeReceivedInEmailRequestDTO("invalid-email", "12345")),
+                Arguments.of(new CodeReceivedInEmailRequestDTO("invalid-email", "abc12")),
+                Arguments.of(new CodeReceivedInEmailRequestDTO("jon.doe@email.com", "!@#$%")),
+                Arguments.of(new CodeReceivedInEmailRequestDTO(" jon.doe@email.com ", "12345")));
+    }
 }
