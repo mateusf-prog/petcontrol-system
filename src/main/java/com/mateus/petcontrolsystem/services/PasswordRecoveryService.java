@@ -3,7 +3,7 @@ package com.mateus.petcontrolsystem.services;
 import com.mateus.petcontrolsystem.dto.password.CodeReceivedEmailResponseDTO;
 import com.mateus.petcontrolsystem.dto.password.CodeReceivedInEmailRequestDTO;
 import com.mateus.petcontrolsystem.dto.password.EmailToRecoverPasswordDTO;
-import com.mateus.petcontrolsystem.dto.password.NewPasswordToRecoveryAccount;
+import com.mateus.petcontrolsystem.dto.password.NewPasswordToRecoveryAccountDTO;
 import com.mateus.petcontrolsystem.infra.security.TokenService;
 import com.mateus.petcontrolsystem.models.PasswordRecovery;
 import com.mateus.petcontrolsystem.models.User;
@@ -70,7 +70,7 @@ public class PasswordRecoveryService {
     }
 
     @Transactional
-    public EmailToRecoverPasswordDTO setNewUserPassword(NewPasswordToRecoveryAccount body) {
+    public EmailToRecoverPasswordDTO setNewUserPassword(NewPasswordToRecoveryAccountDTO body) {
 
         // if token is valid...
         User user = userRepository.findByEmail(body.email()).orElseThrow(

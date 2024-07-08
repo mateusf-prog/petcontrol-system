@@ -4,7 +4,7 @@ import com.mateus.petcontrolsystem.dto.*;
 import com.mateus.petcontrolsystem.dto.password.CodeReceivedEmailResponseDTO;
 import com.mateus.petcontrolsystem.dto.password.CodeReceivedInEmailRequestDTO;
 import com.mateus.petcontrolsystem.dto.password.EmailToRecoverPasswordDTO;
-import com.mateus.petcontrolsystem.dto.password.NewPasswordToRecoveryAccount;
+import com.mateus.petcontrolsystem.dto.password.NewPasswordToRecoveryAccountDTO;
 import com.mateus.petcontrolsystem.services.PasswordRecoveryService;
 import com.mateus.petcontrolsystem.services.UserService;
 import jakarta.validation.Valid;
@@ -46,7 +46,7 @@ public class AuthController {
     }
 
     @PostMapping("/setNewPassword")
-    public ResponseEntity<EmailToRecoverPasswordDTO> setNewPassword(@RequestBody @Valid NewPasswordToRecoveryAccount body) {
+    public ResponseEntity<EmailToRecoverPasswordDTO> setNewPassword(@RequestBody @Valid NewPasswordToRecoveryAccountDTO body) {
         EmailToRecoverPasswordDTO result = recoveryPasswordService.setNewUserPassword(body);
         return ResponseEntity.ok().body(result);
     }

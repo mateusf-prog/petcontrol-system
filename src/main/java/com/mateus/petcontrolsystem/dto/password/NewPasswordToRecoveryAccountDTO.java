@@ -3,7 +3,7 @@ package com.mateus.petcontrolsystem.dto.password;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
-public record NewPasswordToRecoveryAccount(
+public record NewPasswordToRecoveryAccountDTO(
 
         String email,
         @NotBlank(message = "Password cannot be null")
