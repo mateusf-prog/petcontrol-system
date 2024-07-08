@@ -16,10 +16,12 @@ import com.mateus.petcontrolsystem.dto.RegisterRequestDTO;
 import com.mateus.petcontrolsystem.dto.password.CodeReceivedEmailResponseDTO;
 import com.mateus.petcontrolsystem.dto.password.CodeReceivedInEmailRequestDTO;
 import com.mateus.petcontrolsystem.dto.password.EmailToRecoverPasswordDTO;
+import com.mateus.petcontrolsystem.dto.password.NewPasswordToRecoveryAccountDTO;
 import com.mateus.petcontrolsystem.services.PasswordRecoveryService;
 import com.mateus.petcontrolsystem.services.UserService;
 import com.mateus.petcontrolsystem.services.exceptions.EntityAlreadyExistsException;
 import com.mateus.petcontrolsystem.services.exceptions.InvalidPasswordException;
+import com.mateus.petcontrolsystem.services.exceptions.InvalidProcessRecoveryPasswordException;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -189,7 +191,6 @@ public class AuthControllerTest {
                 .andExpect(jsonPath("$.token").value(expectedResponse.token()));
     }
 
-
     @ParameterizedTest
     @MethodSource("provideInvalidCodeReceivedEmailRequestDTO")
     public void validateCodeReceivedInEmail_WithInvalidBody_ReturnsBadRequest(CodeReceivedInEmailRequestDTO body) throws Exception{
@@ -200,18 +201,84 @@ public class AuthControllerTest {
                 .andExpect(status().is(400));
     }
 
-    public static Stream<Arguments> provideInvalidCodeReceivedEmailRequestDTO() {
+    @Test
+    public void validateCodeReceivedInEmail_WithNonExistingUser_ReturnsNotFound() throws Exception {
+
+        var body = PasswordRecoveryConstants.getValidCodeReceivedEmailRequestDTO();
+
+        doThrow(EntityNotFoundException.class).when(passwordRecoveryService).validateCodeReceivedInEmail(body);
+
+        mockMvc.perform(post("/auth/confirmCode")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(body)))
+                .andExpect(status().is(404));
+    }
+
+    // this case happen when not existing a request of password recovery
+    @Test
+    public void validateCodeReceivedInEmail_InvalidRequest_ReturnsBadRequest() throws Exception {
+
+        var body = PasswordRecoveryConstants.getValidCodeReceivedEmailRequestDTO();
+
+        when(passwordRecoveryService.validateCodeReceivedInEmail(body)).thenThrow(InvalidProcessRecoveryPasswordException.class);
+
+        mockMvc.perform(post("/auth/confirmCode")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(body)))
+                .andExpect(status().is(400));
+    }
+
+    @Test
+    public void setNewPassword_WithValidBody_Returns200OK() throws Exception {
+
+        var validBody = PasswordRecoveryConstants.getValidNewPasswordToRecoveryAccountDTO();
+
+        mockMvc.perform(post("/auth/setNewPassword")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(validBody)))
+                .andExpect(status().is(200));
+    }
+
+    @Test
+    public void setNewPassword_WithNonExistingUser_ReturnsNotFound() throws Exception {
+
+        var validBody = PasswordRecoveryConstants.getValidNewPasswordToRecoveryAccountDTO();
+
+        when(passwordRecoveryService.setNewUserPassword(validBody)).thenThrow(EntityNotFoundException.class);
+
+        mockMvc.perform(post("/auth/setNewPassword")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(validBody)))
+                .andExpect(status().is(404));
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideNewPasswordToRecoveryAccountDTO")
+    public void setNewPassword_WithInvalidBody_Returns200OK(NewPasswordToRecoveryAccountDTO body) throws Exception {
+
+        mockMvc.perform(post("/auth/setNewPassword")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(body)))
+                .andExpect(status().is(400));
+    }
+
+    private static Stream<Arguments> provideNewPasswordToRecoveryAccountDTO() {
+        return PasswordRecoveryConstants.provideNewPasswordToRecoveryAccountDTO();
+    }
+
+    private static Stream<Arguments> provideInvalidCodeReceivedEmailRequestDTO() {
         return PasswordRecoveryConstants.provideInvalidCodeReceivedEmailRequestDTO();
     }
-    public static Stream<Arguments> provideInvalidEmailToRecoverPasswordDTO() {
+
+    private static Stream<Arguments> provideInvalidEmailToRecoverPasswordDTO() {
         return PasswordRecoveryConstants.provideInvalidEmailToRecoverPasswordDTO();
     }
 
-    public static Stream<Arguments> provideInvalidRegisterRequestDTO() {
+    private static Stream<Arguments> provideInvalidRegisterRequestDTO() {
         return UserConstants.provideInvalidRegisterRequestDTO();
     }
 
-    public static Stream<Arguments> provideInvalidLoginRequestDTO() {
+    private static Stream<Arguments> provideInvalidLoginRequestDTO() {
         return UserConstants.provideInvalidLoginRequestDTO();
     }
 }
