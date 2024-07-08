@@ -20,14 +20,14 @@ Para ver todas as telas segue o link para o projeto no site do Canva. https://ti
 Neste projeto foi utilizado as seguintes Tecnologias Backend:
 
 - Java
-- Spring Boot
+- Spring Boot 
 - Spring Data JPA
-- Spring Security
+- Spring Security 
 - Bean Validation
 - JavaMailSender
 - Java JWT (OAtuh 0)
 - H2 Database (test)
-- JUnit
+- JUnit 5
 - Mockito
 
 ## Arquitetura
@@ -62,9 +62,10 @@ Atualmente esse projeto contém apenas as configurações de banco de dados para
 
 ## Testes
 
-Este projeto utiliza JUnit e Mockito para testes unitários. A cobertura de testes abrange todas as camadas do projeto, incluindo controladores, serviços e repositórios.
+Este projeto utiliza JUnit 5 para os testes unitários e testes de integração. A cobertura de testes abrange todas as camadas do projeto, incluindo controladores, serviços e repositórios.
 
 <img src="images/tests.png" alt="Captura de tela 1" width="1000" height="500"/>
+<img src="images/testes-2.png" alt="Captura de tela 1" width="1000" height="550"/>
 
 Para executar os testes, você pode usar o seguinte comando no terminal:
 
