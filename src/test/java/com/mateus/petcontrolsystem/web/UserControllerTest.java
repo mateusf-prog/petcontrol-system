@@ -60,7 +60,7 @@ public class UserControllerTest {
     }
 
     @ParameterizedTest
-    @MethodSource("provideInvalidUserUpdateDTO")
+    @MethodSource("com.mateus.petcontrolsystem.common.UserConstants#provideInvalidUserUpdateDTO")
     public void update_WithInvalidData_ReturnsBadRequest(UpdateUserDTO body) throws Exception {
 
         mockMvc.perform(put("/users")
@@ -97,7 +97,7 @@ public class UserControllerTest {
     }
 
     @ParameterizedTest
-    @MethodSource("provideInvalidUserAccessDataRequestDTO")
+    @MethodSource("com.mateus.petcontrolsystem.common.UserConstants#provideInvalidUserAccessDataRequestDTO")
     public void updateAccessData_WithInvalidData_ReturnsBadRequest(UserAccessDataRequestDTO body) throws Exception {
 
         mockMvc.perform(patch("/users/{id}", ANY_VALUE_ID_REQUEST)
@@ -142,15 +142,5 @@ public class UserControllerTest {
                         .content(mapper.writeValueAsString(validBody))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
-    }
-
-
-    public Stream<Arguments> provideInvalidUserUpdateDTO () {
-        return UserConstants.provideInvalidUserUpdateDTO();
-    }
-
-
-    public Stream<Arguments> provideInvalidUserAccessDataRequestDTO () {
-        return UserConstants.provideInvalidUserAccessDataRequestDTO();
     }
 }
