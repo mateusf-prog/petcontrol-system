@@ -69,7 +69,7 @@ public class AuthControllerTest {
     }
 
     @ParameterizedTest
-    @MethodSource("provideInvalidLoginRequestDTO")
+    @MethodSource("com.mateus.petcontrolsystem.common.UserConstants#provideInvalidLoginRequestDTO")
     public void login_WithInvalidData_ReturnsBadRequest(LoginRequestDTO body) throws Exception {
 
         mockMvc.perform(
@@ -120,7 +120,7 @@ public class AuthControllerTest {
     }
 
     @ParameterizedTest
-    @MethodSource("provideInvalidRegisterRequestDTO")
+    @MethodSource("com.mateus.petcontrolsystem.common.UserConstants#provideInvalidRegisterRequestDTO")
     public void register_WithInvalidData_ReturnsBadRequest(RegisterRequestDTO request) throws Exception {
 
         mockMvc.perform(post("/auth/register")
@@ -167,7 +167,7 @@ public class AuthControllerTest {
     }
 
     @ParameterizedTest
-    @MethodSource("provideInvalidEmailToRecoverPasswordDTO")
+    @MethodSource("com.mateus.petcontrolsystem.common.PasswordRecoveryConstants#provideInvalidEmailToRecoverPasswordDTO")
     public void sendCodeToEmail_WithInvalidData_Returns200Ok(EmailToRecoverPasswordDTO body) throws Exception {
 
         mockMvc.perform(post("/auth/passwordRecover")
@@ -192,7 +192,7 @@ public class AuthControllerTest {
     }
 
     @ParameterizedTest
-    @MethodSource("provideInvalidCodeReceivedEmailRequestDTO")
+    @MethodSource("com.mateus.petcontrolsystem.common.PasswordRecoveryConstants#provideInvalidCodeReceivedEmailRequestDTO")
     public void validateCodeReceivedInEmail_WithInvalidBody_ReturnsBadRequest(CodeReceivedInEmailRequestDTO body) throws Exception{
 
         mockMvc.perform(post("/auth/confirmCode")
@@ -253,32 +253,12 @@ public class AuthControllerTest {
     }
 
     @ParameterizedTest
-    @MethodSource("provideNewPasswordToRecoveryAccountDTO")
+    @MethodSource("com.mateus.petcontrolsystem.common.PasswordRecoveryConstants#provideNewPasswordToRecoveryAccountDTO")
     public void setNewPassword_WithInvalidBody_Returns200OK(NewPasswordToRecoveryAccountDTO body) throws Exception {
 
         mockMvc.perform(post("/auth/setNewPassword")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(body)))
                 .andExpect(status().is(400));
-    }
-
-    private static Stream<Arguments> provideNewPasswordToRecoveryAccountDTO() {
-        return PasswordRecoveryConstants.provideNewPasswordToRecoveryAccountDTO();
-    }
-
-    private static Stream<Arguments> provideInvalidCodeReceivedEmailRequestDTO() {
-        return PasswordRecoveryConstants.provideInvalidCodeReceivedEmailRequestDTO();
-    }
-
-    private static Stream<Arguments> provideInvalidEmailToRecoverPasswordDTO() {
-        return PasswordRecoveryConstants.provideInvalidEmailToRecoverPasswordDTO();
-    }
-
-    private static Stream<Arguments> provideInvalidRegisterRequestDTO() {
-        return UserConstants.provideInvalidRegisterRequestDTO();
-    }
-
-    private static Stream<Arguments> provideInvalidLoginRequestDTO() {
-        return UserConstants.provideInvalidLoginRequestDTO();
     }
 }
