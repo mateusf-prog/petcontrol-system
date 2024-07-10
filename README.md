@@ -44,8 +44,7 @@ O sistema contempla a arquitetura em camadas contendo as seguintes camadas:
 
 A parte de segurança da aplicação conta com a criação de tokens JWT. Todas as requisições passam por um filtro personalizado onde esse filtro trata os tokens.
 
-<img src="images/tokens.png" alt="Captura de tela 1" width="400"/>
-<img src="images/security-filter.png" alt="Captura de tela 1" width="1200" height="500"/>
+<img src="images/token.png" alt="Captura de tela 1" width="500"/>
 
 Os únicos endpoints que são públicos, são:
 
@@ -64,7 +63,7 @@ Atualmente esse projeto contém apenas as configurações de banco de dados para
 
 Este projeto utiliza JUnit 5 para os testes unitários e testes de integração. A cobertura de testes abrange todas as camadas do projeto, incluindo controladores, serviços e repositórios.
 
-<img src="images/tests.png" alt="Captura de tela 1" width="1000" height="500"/>
+<img src="images/tests.png" alt="Captura de tela 1" width="1000" height="550"/>
 <img src="images/testes-2.png" alt="Captura de tela 1" width="1000" height="550"/>
 
 Para executar os testes, você pode usar o seguinte comando no terminal:
