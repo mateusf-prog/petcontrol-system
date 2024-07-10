@@ -17,8 +17,7 @@ public class PasswordRecovery {
     private Long id;
     @Column(unique = true, nullable = false)
     private String userEmail;
-    @Column(nullable = false)
     private String recoveryCode;
-    @Column(columnDefinition = "TIMESTAMP", nullable = false)
+    @Column(columnDefinition = "TIMESTAMP")
     private Instant codeCreatedAt;
 }
