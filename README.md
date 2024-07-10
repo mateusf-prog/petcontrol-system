@@ -27,6 +27,7 @@ Neste projeto foi utilizado as seguintes Tecnologias Backend:
 - JavaMailSender
 - Java JWT (OAtuh 0)
 - H2 Database (test)
+- PostgreSQL (prod)
 - JUnit 5
 - Mockito
 
@@ -39,6 +40,14 @@ O sistema contempla a arquitetura em camadas contendo as seguintes camadas:
 - Repositories
 - Infra (config, security)
 - Services
+
+## Configuração do projeto
+
+Atualmente o projeto tem os seguintes arquivos e classes configurações:
+- application.properties - Define qual perfil o projeto está rodando (prod ou test)
+- application-test.properties - Define configurações do banco de dados H2
+- application-prod.properties - Define configurações do banco de dados PostgreSQL e host para envio do email (SMTP Gmail)
+- Classes de configuração dentro do pacote (Infra) definem configurações de segurança, CORS e host teste para envio de email.
 
 ## Segurança
 
@@ -53,12 +62,6 @@ Os únicos endpoints que são públicos, são:
 - /auth/passwordRecover: Página de recuperação de senha
 - /auth/confirmCode: Página de confirmação do código recebido no email para recuperação de senha.
 
-
-## Banco de dados e seeding
-
-Atualmente esse projeto contém apenas as configurações de banco de dados para o banco de dados de teste H2. Na pasta resources do projeto, contém o arquivo import.sql para o seeding do banco. Futuramente será utilizado o banco de dados PostgreSQL em um container Docker.
-
-
 ## Testes
 
 Este projeto utiliza JUnit 5 para os testes unitários e testes de integração. A cobertura de testes abrange todas as camadas do projeto, incluindo controladores, serviços e repositórios.
@@ -69,14 +72,16 @@ Este projeto utiliza JUnit 5 para os testes unitários e testes de integração.
 Para executar os testes, você pode usar o seguinte comando no terminal:
 
 ```bash
-mvn test 
+mvn test # caso tenha o maven instalado
 ```
 ou diretamente na pasta raiz do projeto com o comando:
 ```bash
-./mvnw test
+./mvnw test # caso nao tenha o maven instalado
 ```
 
 ## Instalação 
+
+OBS: Antes de rodar o projeto, certifique-se de configurar as variáveis de ambiente no SO ou na IDE, que configuram o host de email (test e prod) e o token. 
 
 Para rodar o projeto em sua máquina há duas formas:
 
