@@ -64,6 +64,8 @@ Os únicos endpoints que são públicos, são:
 
 ## Testes
 
+OBS: Antes de rodar os testes do projeto, certifique-se de configurar as variáveis de ambiente no SO ou na IDE, que configuram o host de email (test e prod) e o token.
+
 Este projeto utiliza JUnit 5 para os testes unitários e testes de integração. A cobertura de testes abrange todas as camadas do projeto, incluindo controladores, serviços e repositórios.
 
 <img src="images/tests.png" alt="Captura de tela 1" width="1000" height="550"/>
