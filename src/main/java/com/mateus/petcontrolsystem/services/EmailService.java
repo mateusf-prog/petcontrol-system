@@ -43,8 +43,6 @@ public class EmailService {
 
     private void sendEmail(SimpleMailMessage data) {
 
-        data.setFrom("noreply@petcontrolsystem");
-
         try {
             mailSender.send(data);
         } catch (MailSendException e) {
@@ -58,6 +56,41 @@ public class EmailService {
 
     public void sendUpdateDataToEmail(String email, String name) {
 
-        //todo implement
+        String message = "Olá " + name + ",\n"+
+                "\n" +
+                "Gostaríamos de informar que os seus dados foram atualizados com sucesso em nosso sistema.\n" +
+                "\n" +
+                "Se você não solicitou essa atualização ou se notar alguma discrepância nas informações, por favor, " +
+                "entre em contato conosco imediatamente para que possamos corrigir qualquer problema.\n" +
+                "\n" +
+                "Atenciosamente,\n" +
+                "Equipe PetControl System";
+
+        SimpleMailMessage emailToSend = new SimpleMailMessage();
+        emailToSend.setTo(email);
+        emailToSend.setSubject("Boas vindas ao PetControl System!");
+        emailToSend.setText(message);
+
+        sendEmail(emailToSend);
+    }
+
+    public void sendEmailNewPasswordSet(String email, String name) {
+
+        String message = "Olá " + name + ",\n"+
+                "\n" +
+                "Gostaríamos de informar que sua senha foi atualizada com sucesso em nosso sistema.\n" +
+                "\n" +
+                "Se você não solicitou essa atualização ou se notar alguma discrepância nas informações, por favor, " +
+                "entre em contato conosco imediatamente para que possamos corrigir qualquer problema.\n" +
+                "\n" +
+                "Atenciosamente,\n" +
+                "Equipe PetControl System";
+
+        SimpleMailMessage emailToSend = new SimpleMailMessage();
+        emailToSend.setTo(email);
+        emailToSend.setSubject("Boas vindas ao PetControl System!");
+        emailToSend.setText(message);
+
+        sendEmail(emailToSend);
     }
 }
