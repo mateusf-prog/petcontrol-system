@@ -12,6 +12,7 @@ import com.mateus.petcontrolsystem.common.UserConstants;
 import com.mateus.petcontrolsystem.dto.*;
 import com.mateus.petcontrolsystem.infra.security.TokenService;
 import com.mateus.petcontrolsystem.repositories.UserRepository;
+import com.mateus.petcontrolsystem.services.EmailService;
 import com.mateus.petcontrolsystem.services.UserService;
 import com.mateus.petcontrolsystem.services.exceptions.EntityAlreadyExistsException;
 import com.mateus.petcontrolsystem.services.exceptions.InvalidPasswordException;
@@ -42,6 +43,8 @@ public class UserServiceTest {
     private TokenService tokenService;
     @Mock
     private PasswordEncoder passwordEncoder;
+    @Mock
+    private EmailService emailService; // just use for some methods that need this service as a dependency
 
     // 'login' tests
 
