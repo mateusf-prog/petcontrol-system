@@ -41,7 +41,7 @@ public class EmailService {
         sendEmail(emailToSend);
     }
 
-    private void sendEmail(SimpleMailMessage data) {
+    public void sendEmail(SimpleMailMessage data) {
 
         try {
             mailSender.send(data);
