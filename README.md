@@ -63,8 +63,10 @@ Os únicos endpoints que são públicos, são:
 - /auth/confirmCode: Página de confirmação do código recebido no email para recuperação de senha.
 
 ## Testes
-
-OBS: Antes de rodar os testes do projeto, certifique-se de configurar as variáveis de ambiente no SO ou na IDE, que configuram o host de email (test e prod) e o token.
+Antes de rodar os testes:
+- Certifique-se de estar no perfil de teste antes de rodar os testes, pois no perfil de produção é utilizado outro banco de dados que utiliza um esquema de DATA diferente.
+- Certifique-se de configurar as variáveis de ambiente no SO ou na IDE, que configuram o host de email (test e prod) e o token. 
+- Alguns testes de envio de email estão desativados para não consumir o limite de emails do servidor SMTP, basta ativá-los removendo o @Disable na classe [EmailIntegrationTest.java](src%2Ftest%2Fjava%2Fcom%2Fmateus%2Fpetcontrolsystem%2Fmodels%2FEmailIntegrationTest.java)
 
 Este projeto utiliza JUnit 5 para os testes unitários e testes de integração. A cobertura de testes abrange todas as camadas do projeto, incluindo controladores, serviços e repositórios.
 
