@@ -24,6 +24,7 @@ public class UserService {
     private final ObjectMapper mapper;
     private final TokenService tokenService;
     private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
 
     @Transactional(readOnly = true)
     public LoginResponseDTO login(LoginRequestDTO body) {
@@ -51,6 +52,7 @@ public class UserService {
         User newUser = mapper.convertValue(body, User.class);
         newUser.setPassword(passwordEncoder.encode(body.password()));
         repository.save(newUser);
+        emailService.sendWelcomeMessageToNewUser(newUser.getEmail(), newUser.getName());
     }
 
     @Transactional
@@ -82,6 +84,7 @@ public class UserService {
         user.setEmail(body.email());
         user.setPassword(passwordEncoder.encode(body.newPassword()));
         repository.save(user);
+        emailService.sendUpdateDataToEmail(body.email(), user.getName());
         return mapper.convertValue(user, UserAccessDataResponseDTO.class);
     }
 }
