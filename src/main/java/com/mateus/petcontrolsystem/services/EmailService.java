@@ -17,12 +17,36 @@ public class EmailService {
 
         SimpleMailMessage emailToSend = new SimpleMailMessage();
         emailToSend.setTo(email);
-        emailToSend.setFrom("noreply@petcontrolsystem");
         emailToSend.setSubject("Código de verificação - PetControl System");
         emailToSend.setText(message);
 
+        sendEmail(emailToSend);
+    }
+
+    public void sendWelcomeMessageToNewUser(String email, String name) {
+        String message = "Olá " + name + "\n"+
+                "\n" +
+                "Seja bem-vindo ao PetControl System! Estamos muito felizes por você ter se juntado a nós.\n" +
+                "\n" +
+                "Esperamos que aproveite ao máximo nossos serviços. Em caso de dúvidas ou sugestões, não hesite em entrar em contato conosco.\n" +
+                "\n" +
+                "Atenciosamente,\n" +
+                "Equipe PetControl System";
+
+        SimpleMailMessage emailToSend = new SimpleMailMessage();
+        emailToSend.setTo(email);
+        emailToSend.setSubject("Boas vindas ao PetControl System!");
+        emailToSend.setText(message);
+
+        sendEmail(emailToSend);
+    }
+
+    private void sendEmail(SimpleMailMessage data) {
+
+        data.setFrom("noreply@petcontrolsystem");
+
         try {
-            mailSender.send(emailToSend);
+            mailSender.send(data);
         } catch (MailSendException e) {
             throw new MailSendException("ERROR SENDING EMAIL CODE");
         } catch (MailAuthenticationException e) {
@@ -30,5 +54,10 @@ public class EmailService {
         } catch (MailPreparationException e) {
             throw new MailPreparationException("ERROR DURING PREPARATION EMAIL MESSAGE");
         }
+    }
+
+    public void sendUpdateDataToEmail(String email, String name) {
+
+        //todo implement
     }
 }
