@@ -78,6 +78,7 @@ public class PasswordRecoveryService {
 
         user.setPassword(passwordEncoder.encode(body.newPassword()));
         userRepository.save(user);
+        emailService.sendEmailNewPasswordSet(user.getEmail(), user.getName());
         return new EmailToRecoverPasswordDTO(user.getEmail());
     }
 
