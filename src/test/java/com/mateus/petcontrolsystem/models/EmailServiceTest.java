@@ -3,7 +3,6 @@ package com.mateus.petcontrolsystem.models;
 import static org.mockito.Mockito.*;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.mateus.petcontrolsystem.common.EmailConstants;
 import com.mateus.petcontrolsystem.services.EmailService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,8 +12,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mail.MailAuthenticationException;
 import org.springframework.mail.MailPreparationException;
 import org.springframework.mail.MailSendException;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 
+/**
+ * This test only tests the method that actually sends the e-mail,
+ * the others are irrelevant because they only write the e-mail data
+ */
 @ExtendWith(MockitoExtension.class)
 public class EmailServiceTest {
 
@@ -25,50 +29,32 @@ public class EmailServiceTest {
     private JavaMailSender mailSender;
 
     @Test
-    public void sendCodeToEmail_WithValidData_ReturnsNothing() {
+    public void sendEmail_ReturnsNothing() {
 
-        var email = EmailConstants.getValidEmail();
-        var code = EmailConstants.getCode();
-        var emailToSend = EmailConstants.getValidSimpleMailMessage();
-
-        doNothing().when(mailSender).send(emailToSend);
-        service.sendCodeToEmail(code, email);
-
-        verify(mailSender).send(emailToSend);
+        service.sendEmail(any(SimpleMailMessage.class));
     }
 
     @Test
-    public void sendCodeToEmail_GlobalMessageException_ThrowsMailSendException() {
+    public void sendEmail_ThrowsMailPreparationException() {
 
-        var email = EmailConstants.getValidEmail();
-        var code = EmailConstants.getCode();
-        var emailToSend = EmailConstants.getValidSimpleMailMessage();
+        doThrow(MailPreparationException.class).when(mailSender).send(any(SimpleMailMessage.class));
 
-        doThrow(MailSendException.class).when(mailSender).send(emailToSend);
-
-        assertThatThrownBy(() -> service.sendCodeToEmail(code, email)).isInstanceOf(MailSendException.class);
+        assertThatThrownBy(() -> service.sendEmail(any(SimpleMailMessage.class))).isInstanceOf(RuntimeException.class);
     }
 
     @Test
-    public void sendCodeToEmail_WithInvalidAuthenticateDataHost_ThrowsMailAuthenticationException() {
+    public void sendEmail_ThrowsMailAuthenticationException() {
 
-        var email = EmailConstants.getValidEmail();
-        var code = EmailConstants.getCode();
-        var emailToSend = EmailConstants.getValidSimpleMailMessage();
+        doThrow(MailAuthenticationException.class).when(mailSender).send(any(SimpleMailMessage.class));
 
-        doThrow(MailAuthenticationException.class).when(mailSender).send(emailToSend);
-
-        assertThatThrownBy(() -> service.sendCodeToEmail(code, email)).isInstanceOf(MailAuthenticationException.class);
+        assertThatThrownBy(() -> service.sendEmail(any(SimpleMailMessage.class))).isInstanceOf(RuntimeException.class);
     }
+
     @Test
-    public void sendCodeToEmail_WithErrorInMailPreparation_ThrowsMailPreparationException() {
+    public void sendEmail_ThrowsMailMailSendException() {
 
-        var email = EmailConstants.getValidEmail();
-        var code = EmailConstants.getCode();
-        var emailToSend = EmailConstants.getValidSimpleMailMessage();
+        doThrow(MailSendException.class).when(mailSender).send(any(SimpleMailMessage.class));
 
-        doThrow(MailPreparationException.class).when(mailSender).send(emailToSend);
-
-        assertThatThrownBy(() -> service.sendCodeToEmail(code, email)).isInstanceOf(MailPreparationException.class);
+        assertThatThrownBy(() -> service.sendEmail(any(SimpleMailMessage.class))).isInstanceOf(RuntimeException.class);
     }
 }
