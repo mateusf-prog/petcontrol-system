@@ -110,6 +110,30 @@ public class UserRepositoryTest {
     }
 
     @Test
+    public void findById_WithValidId_ReturnsUser() {
+
+        var validUser= UserConstants.getValidUser();
+        validUser = testEntityManager.persistAndFlush(validUser);
+        testEntityManager.detach(validUser);
+
+        var sut = repository.findById(validUser.getId());
+
+        assertThat(sut).isNotNull();
+        assertThat(sut.get().getEmail()).isEqualTo(validUser.getEmail());
+        assertThat(sut.get().getCpfCnpj()).isEqualTo(validUser.getCpfCnpj());
+    }
+
+    @Test
+    public void findById_WithNonExistingUserById_ReturnsEmptyOptional() {
+
+        var nonExistingUserId = 1L;
+
+        var sut = repository.findById(nonExistingUserId);
+
+        assertThat(sut).isEqualTo(Optional.empty());
+    }
+
+    @Test
     public void save_WithValidData_ReturnsUser() {
 
         var validUser = UserConstants.getValidUser();
@@ -121,7 +145,7 @@ public class UserRepositoryTest {
     }
 
     @Test
-    public void save_WithAlreadyUserByEmail_ReturnsThrowsException() {
+    public void save_WithAlreadyUserByEmail_ThrowsException() {
 
         var validUser = UserConstants.getValidUser();
 

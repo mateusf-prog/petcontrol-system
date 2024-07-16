@@ -214,4 +214,11 @@ public class UserConstants {
                 Arguments.of(new RegisterRequestDTO("Jon Doe", "jon.doe@hotmail.com", "50108953076", "12997825148", LocalDate.of(1958, 6, 25), "Password1234",
                         new AddressDTO("12212700", "Rua das Araras", "170", "Jardim Telespark", "sa", "SP")))));
     }
+
+    public static GetUserDataResponseDTO validGetUserDataResponseDTO() {
+        AddressDTO addressDTO = new AddressDTO("12212700", "Rua das Araras", "170",
+                "Jardim Telespark", "sa", "SP");
+        return new GetUserDataResponseDTO("Jon Doe", "email@teste.com", "50108953076", "12997825148",
+                LocalDate.of(1980, 5, 25), addressDTO);
+    }
 }
