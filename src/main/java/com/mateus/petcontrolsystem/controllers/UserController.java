@@ -1,6 +1,7 @@
 package com.mateus.petcontrolsystem.controllers;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.mateus.petcontrolsystem.dto.GetUserDataResponseDTO;
 import com.mateus.petcontrolsystem.dto.UpdateUserDTO;
 import com.mateus.petcontrolsystem.dto.UserAccessDataRequestDTO;
 import com.mateus.petcontrolsystem.dto.UserAccessDataResponseDTO;
@@ -16,6 +17,11 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService service;
+
+    @GetMapping("/{id}")
+    public ResponseEntity<GetUserDataResponseDTO> getUserById(@PathVariable Long id) {
+        return ResponseEntity.ok(service.getUserById(id));
+    }
 
     @PutMapping
     public ResponseEntity<UpdateUserDTO> update(@RequestBody @Valid UpdateUserDTO body) throws JsonMappingException {

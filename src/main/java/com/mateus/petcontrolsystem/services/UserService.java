@@ -87,4 +87,12 @@ public class UserService {
         emailService.sendUpdateDataToEmail(body.email(), user.getName());
         return mapper.convertValue(user, UserAccessDataResponseDTO.class);
     }
+
+    @Transactional(readOnly = true)
+    public GetUserDataResponseDTO getUserById(Long id) {
+        User entity = repository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("ENTITY NOT FOUND"));
+
+        return mapper.convertValue(entity, GetUserDataResponseDTO.class);
+    }
 }
