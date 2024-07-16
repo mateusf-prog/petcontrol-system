@@ -1,10 +1,13 @@
 package com.mateus.petcontrolsystem.controllers;
 
-import com.mateus.petcontrolsystem.dto.NewProductRequestDTO;
+import com.mateus.petcontrolsystem.dto.ProductDTO;
 import com.mateus.petcontrolsystem.services.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,7 +19,19 @@ public class ProductController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void create(@RequestBody @Valid NewProductRequestDTO body) {
+    public void create(@RequestBody @Valid ProductDTO body) {
         service.create(body);
+    }
+
+    @PutMapping
+    @ResponseStatus(HttpStatus.OK)
+    public void update(@RequestBody @Valid ProductDTO dto) throws Exception {
+        service.update(dto);
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<ProductDTO>> findAll(Pageable pageable) {
+        Page<ProductDTO> result = service.findAll(pageable);
+        return ResponseEntity.ok(result);
     }
 }
