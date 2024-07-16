@@ -34,4 +34,10 @@ public class ProductController {
         Page<ProductDTO> result = service.findAll(pageable);
         return ResponseEntity.ok(result);
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void delete(@PathVariable Long id){
+        service.delete(id);
+    }
 }

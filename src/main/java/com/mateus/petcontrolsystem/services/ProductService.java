@@ -1,6 +1,5 @@
 package com.mateus.petcontrolsystem.services;
 
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mateus.petcontrolsystem.dto.ProductDTO;
 import com.mateus.petcontrolsystem.models.Product;
@@ -9,12 +8,10 @@ import com.mateus.petcontrolsystem.services.exceptions.EntityAlreadyExistsExcept
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
 import java.util.Optional;
 
 @Service
@@ -36,12 +33,11 @@ public class ProductService {
 
     @Transactional
     public void update(ProductDTO dto) throws Exception {
-
         if (dto.id() == null) throw new EntityNotFoundException("PRODUCT NOT FOUND");
-        Product isExistingProduct = repository.findById(dto.id()).orElseThrow(() -> new EntityNotFoundException("PRODUCT NOT FOUND"));
+        Product entity = repository.findById(dto.id()).orElseThrow(() -> new EntityNotFoundException("PRODUCT NOT FOUND"));
 
-        isExistingProduct= mapper.updateValue(isExistingProduct, dto);
-        repository.save(isExistingProduct);
+        entity= mapper.updateValue(entity, dto);
+        repository.save(entity);
     }
 
     @Transactional(readOnly = true)
@@ -52,7 +48,11 @@ public class ProductService {
         return result.map(x -> mapper.convertValue(x, ProductDTO.class));
     }
 
-    // todo methods to find by name, delete,
+    @Transactional
+    public void delete(Long id) {
+        Product result = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("PRODUCT NOT FOUND"));
+        repository.delete(result);
+    }
 }
 
 
