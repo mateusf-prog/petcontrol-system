@@ -231,5 +231,31 @@ public class UserServiceTest {
         assertThatThrownBy(() -> service.updateAccessData(validUserAccessData, 3L)).isInstanceOf(InvalidPasswordException.class);
     }
 
+
+    @Test
+    public void getUserById_WithValidData_ReturnsGetUserDataResponseDTO() {
+
+        var anyId = 3L;
+        var validEntity = UserConstants.getValidUser();
+        var expectedResponse =  UserConstants.validGetUserDataResponseDTO();
+
+        when(repository.findById(anyId)).thenReturn(Optional.of(validEntity));
+        when(mapper.convertValue(validEntity, GetUserDataResponseDTO.class)).thenReturn(expectedResponse);
+
+        var sut = service.getUserById(anyId);
+
+        assertThat(sut).isEqualTo(expectedResponse);
+        assertThat(sut.email()).isEqualTo(validEntity.getEmail());
+    }
+
+    @Test
+    public void getUserById_WithInvalidId_ThrowsException() {
+
+        var nonExistingUserId = 1L;
+
+        when(repository.findById(nonExistingUserId)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> service.getUserById(nonExistingUserId)).isInstanceOf(EntityNotFoundException.class);
+    }
 }
 
