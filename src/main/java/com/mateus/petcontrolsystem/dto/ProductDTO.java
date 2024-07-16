@@ -5,7 +5,8 @@ import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
 
-public record NewProductRequestDTO(
+public record ProductDTO(
+        Long id,
         @NotBlank(message = "Name cannot be null")
         @Size(min = 3, message = "Invalid name")
         String name,
