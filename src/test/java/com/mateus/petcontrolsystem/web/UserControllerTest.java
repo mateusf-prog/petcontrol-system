@@ -12,7 +12,6 @@ import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -22,11 +21,9 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.stream.Stream;
-
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Profile("test")
@@ -54,8 +51,8 @@ public class UserControllerTest {
         when(userService.update(validBody)).thenReturn(validBody);
 
         mockMvc.perform(put("/users")
-                    .content(mapper.writeValueAsString(validBody))
-                    .contentType(MediaType.APPLICATION_JSON))
+                        .content(mapper.writeValueAsString(validBody))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(200));
     }
 
@@ -142,5 +139,27 @@ public class UserControllerTest {
                         .content(mapper.writeValueAsString(validBody))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void getUserById_WithExistingUser_Returns200() throws Exception {
+
+        var expectedResponse = UserConstants.validGetUserDataResponseDTO();
+
+        when(userService.getUserById(anyLong())).thenReturn(expectedResponse);
+
+        mockMvc.perform(get("/users/{id}", ANY_VALUE_ID_REQUEST)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is(200));
+    }
+
+    @Test
+    public void getUserById_WithNonExistingUserById_ReturnsNotFound() throws Exception {
+
+        when(userService.getUserById(anyLong())).thenThrow(EntityNotFoundException.class);
+
+        mockMvc.perform(get("/users/{id}", ANY_VALUE_ID_REQUEST)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is(404));
     }
 }
