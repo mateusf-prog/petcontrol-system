@@ -54,7 +54,7 @@ public class UserServiceTest {
         var validUser = UserConstants.getValidUser();
 
         LoginRequestDTO dto = new LoginRequestDTO(validUser.getEmail(), validUser.getPassword());
-        LoginResponseDTO expectedResponse = new LoginResponseDTO("generated-token");
+        LoginResponseDTO expectedResponse = new LoginResponseDTO(null,"generated-token");
 
         when(repository.findByEmail(validUser.getEmail())).thenReturn(Optional.of(validUser));
         when(passwordEncoder.matches(validUser.getPassword(),validUser.getPassword())).thenReturn(true);

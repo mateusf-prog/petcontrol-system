@@ -34,7 +34,7 @@ public class UserService {
         if (!passwordEncoder.matches(body.password(), user.getPassword())) {
             throw new InvalidPasswordException("INVALID PASSWORD");
         }
-        return new LoginResponseDTO(tokenService.generateToken(user));
+        return new LoginResponseDTO(user.getId(), tokenService.generateToken(user));
     }
 
     @Transactional

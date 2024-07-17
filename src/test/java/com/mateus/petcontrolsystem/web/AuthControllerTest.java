@@ -58,7 +58,7 @@ public class AuthControllerTest {
     public void login_WithValidData_Returns200() throws Exception {
 
         var validBodyRequest = UserConstants.getValidLoginRequestDTO();
-        var expectedResponse = new LoginResponseDTO("generated-token");
+        var expectedResponse = new LoginResponseDTO(null, "generated-token");
 
         when(userService.login(validBodyRequest)).thenReturn(expectedResponse);
 
