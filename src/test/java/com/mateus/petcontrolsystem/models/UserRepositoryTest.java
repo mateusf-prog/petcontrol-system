@@ -37,13 +37,13 @@ public class UserRepositoryTest {
     }
 
     @Test
-    public void findByEmail_WithNonExistentUserByEmail_ReturnsUser() {
+    public void findByEmail_WithNonExistentUserByEmail_ReturnsEmptyOptional() {
 
         var validUser = UserConstants.getValidUser();
 
         var sut = repository.findByEmail(validUser.getEmail());
 
-        assertThat(sut).isEqualTo(Optional.empty());
+        assertThat(sut).isEmpty();
     }
 
     @Test
@@ -66,7 +66,7 @@ public class UserRepositoryTest {
 
         var sut = repository.findByCpfCnpj(validUser.getCpfCnpj());
 
-        assertThat(sut).isEqualTo(Optional.empty());
+        assertThat(sut).isEmpty();
     }
 
     @Test
@@ -130,7 +130,7 @@ public class UserRepositoryTest {
 
         var sut = repository.findById(nonExistingUserId);
 
-        assertThat(sut).isEqualTo(Optional.empty());
+        assertThat(sut).isEmpty();
     }
 
     @Test
@@ -157,7 +157,7 @@ public class UserRepositoryTest {
     }
 
     @Test
-    public void update_WithValidData_ReturnsUser() {
+    public void update_WithValidData_ReturnsUpdatedUser() {
 
         var validUser = UserConstants.getValidUser();
         testEntityManager.persistAndFlush(validUser);
