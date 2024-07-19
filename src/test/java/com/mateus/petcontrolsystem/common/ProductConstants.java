@@ -13,6 +13,11 @@ public class ProductConstants {
                 20, Category.ACCESSORY, null);
     }
 
+    public static Product provideInvalidProduct() {
+        return new Product(null, null, null, null, null,
+                null, null, null);
+    }
+
     public static ProductDTO provideValidProductDTO() {
         return new ProductDTO(null, "Vacina 1", "Labovet", BigDecimal.valueOf(60.0), "descrição do produto ....",
                 20, Category.ACCESSORY);
