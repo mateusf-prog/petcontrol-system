@@ -11,7 +11,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 /**
- * This class is disable because the host smtp is free, therefore it have a monthly limit of requests.
+ * This class is disabled because the host smtp is free, therefore it have a monthly limit of requests.
  * NOTE: This affirmation its only this host configuration
  */
 
