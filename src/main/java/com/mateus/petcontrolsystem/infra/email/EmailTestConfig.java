@@ -22,7 +22,7 @@ public class EmailTestConfig {
 
     @Bean
     public JavaMailSender mailSender() {
-        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+        var mailSender = new JavaMailSenderImpl();
         mailSender.setHost(host);
         mailSender.setPort(port);
         mailSender.setUsername(username);

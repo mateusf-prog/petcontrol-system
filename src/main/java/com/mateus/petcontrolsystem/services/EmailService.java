@@ -1,6 +1,9 @@
 package com.mateus.petcontrolsystem.services;
 
+import com.mateus.petcontrolsystem.services.utils.EmailMessageConstants;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.mail.*;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -10,86 +13,58 @@ import org.springframework.stereotype.Service;
 public class EmailService {
 
     private final JavaMailSender mailSender;
+    private static final Logger logger = LoggerFactory.getLogger(EmailService.class);
 
     public void sendCodeToEmail(String code, String email) {
 
-        String message = "Seu código de verificação é " + code + "\nSeu código tem duração de 10 minutos.";
+        var message = String.format("Seu código de verificação é %s\nSeu código tem duração de 10 minutos.", code);
 
-        SimpleMailMessage emailToSend = new SimpleMailMessage();
+        var emailToSend = new SimpleMailMessage();
         emailToSend.setTo(email);
-        emailToSend.setSubject("Código de verificação - PetControl System");
+        emailToSend.setSubject(EmailMessageConstants.SEND_CODE_SUBJECT);
         emailToSend.setText(message);
 
         sendEmail(emailToSend);
     }
 
     public void sendWelcomeMessageToNewUser(String email, String name) {
-        String message = "Olá " + name + "\n"+
-                "\n" +
-                "Seja bem-vindo ao PetControl System! Estamos muito felizes por você ter se juntado a nós.\n" +
-                "\n" +
-                "Esperamos que aproveite ao máximo nossos serviços. Em caso de dúvidas ou sugestões, não hesite em entrar em contato conosco.\n" +
-                "\n" +
-                "Atenciosamente,\n" +
-                "Equipe PetControl System";
 
-        SimpleMailMessage emailToSend = new SimpleMailMessage();
+        var emailToSend = new SimpleMailMessage();
         emailToSend.setTo(email);
-        emailToSend.setSubject("Boas vindas ao PetControl System!");
-        emailToSend.setText(message);
+        emailToSend.setSubject(EmailMessageConstants.WELCOME_SUBJECT);
+        emailToSend.setText(EmailMessageConstants.WELCOME_MESSAGE_BODY);
 
         sendEmail(emailToSend);
     }
 
     public void sendEmail(SimpleMailMessage data) {
-
         try {
             mailSender.send(data);
         } catch (MailSendException e) {
-            throw new MailSendException("ERROR SENDING EMAIL CODE");
+            logger.error("ERROR SENDING EMAIL CODE", e);
         } catch (MailAuthenticationException e) {
-            throw new MailAuthenticationException("ERROR AUTHENTICATE MAIL SERVER");
+            logger.error("ERROR AUTHENTICATE MAIL SERVER", e);
         } catch (MailPreparationException e) {
-            throw new MailPreparationException("ERROR DURING PREPARATION EMAIL MESSAGE");
+            logger.error("ERROR DURING PREPARATION EMAIL MESSAGE", e);
         }
     }
 
     public void sendUpdateDataToEmail(String email, String name) {
 
-        String message = "Olá " + name + ",\n"+
-                "\n" +
-                "Gostaríamos de informar que os seus dados foram atualizados com sucesso em nosso sistema.\n" +
-                "\n" +
-                "Se você não solicitou essa atualização ou se notar alguma discrepância nas informações, por favor, " +
-                "entre em contato conosco imediatamente para que possamos corrigir qualquer problema.\n" +
-                "\n" +
-                "Atenciosamente,\n" +
-                "Equipe PetControl System";
-
-        SimpleMailMessage emailToSend = new SimpleMailMessage();
+        var emailToSend = new SimpleMailMessage();
         emailToSend.setTo(email);
-        emailToSend.setSubject("Boas vindas ao PetControl System!");
-        emailToSend.setText(message);
+        emailToSend.setSubject(EmailMessageConstants.UPDATE_DATA_SUBJECT);
+        emailToSend.setText(EmailMessageConstants.UPDATE_DATA_BODY);
 
         sendEmail(emailToSend);
     }
 
     public void sendEmailNewPasswordSet(String email, String name) {
 
-        String message = "Olá " + name + ",\n"+
-                "\n" +
-                "Gostaríamos de informar que sua senha foi atualizada com sucesso em nosso sistema.\n" +
-                "\n" +
-                "Se você não solicitou essa atualização ou se notar alguma discrepância nas informações, por favor, " +
-                "entre em contato conosco imediatamente para que possamos corrigir qualquer problema.\n" +
-                "\n" +
-                "Atenciosamente,\n" +
-                "Equipe PetControl System";
-
-        SimpleMailMessage emailToSend = new SimpleMailMessage();
+        var emailToSend = new SimpleMailMessage();
         emailToSend.setTo(email);
-        emailToSend.setSubject("Boas vindas ao PetControl System!");
-        emailToSend.setText(message);
+        emailToSend.setSubject(EmailMessageConstants.PASSWORD_RESET_SUBJECT);
+        emailToSend.setText(EmailMessageConstants.PASSWORD_RESET_BODY);
 
         sendEmail(emailToSend);
     }

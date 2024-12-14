@@ -36,10 +36,10 @@ public class PasswordRecoveryService {
     @Transactional
     public void sendCodeToEmail(EmailToRecoverPasswordDTO body) {
 
-        User user = userRepository.findByEmail(body.email()).orElseThrow(
+        var user = userRepository.findByEmail(body.email()).orElseThrow(
                 () -> new EntityNotFoundException("USER NOT FOUND"));
 
-        String randomCode = generateCodeToSendToEmail();
+        var randomCode = generateCodeToSendToEmail();
 
         PasswordRecovery passwordRecovery = new PasswordRecovery();
         passwordRecovery.setUserEmail(user.getEmail());
@@ -53,7 +53,7 @@ public class PasswordRecoveryService {
     @Transactional
     public CodeReceivedEmailResponseDTO validateCodeReceivedInEmail(CodeReceivedInEmailRequestDTO body) {
 
-        User user = userRepository.findByEmail(body.email()).orElseThrow(
+        var user = userRepository.findByEmail(body.email()).orElseThrow(
                 () -> new EntityNotFoundException("USER NOT FOUND"));
 
         Optional<PasswordRecovery> existingPasswordRecovery = Optional.ofNullable(repository.findByUserEmail(user.getEmail()).orElseThrow(
@@ -61,7 +61,7 @@ public class PasswordRecoveryService {
         ));
         validateCodeReceived(body, existingPasswordRecovery.get());
 
-        String token = tokenService.generateTemporaryTokenToRecoveryPassword(user);
+        var token = tokenService.generateTemporaryTokenToRecoveryPassword(user);
 
         existingPasswordRecovery.get().setRecoveryCode(null);
         existingPasswordRecovery.get().setCodeCreatedAt(null);
@@ -73,7 +73,7 @@ public class PasswordRecoveryService {
     public EmailToRecoverPasswordDTO setNewUserPassword(NewPasswordToRecoveryAccountDTO body) {
 
         // if token is valid...
-        User user = userRepository.findByEmail(body.email()).orElseThrow(
+        var user = userRepository.findByEmail(body.email()).orElseThrow(
                 () -> new EntityNotFoundException("USER NOT FOUND"));
 
         user.setPassword(passwordEncoder.encode(body.newPassword()));
@@ -84,8 +84,8 @@ public class PasswordRecoveryService {
 
     public String generateCodeToSendToEmail() {
         var CODE_LENGTH = 5;
-        Random random = new Random();
-        StringBuilder code = new StringBuilder(CODE_LENGTH);
+        var random = new Random();
+        var code = new StringBuilder(CODE_LENGTH);
 
         for (int i = 0; i < 5; i++) {
             int digit = random.nextInt(10);
@@ -96,12 +96,9 @@ public class PasswordRecoveryService {
     }
 
     public void validateCodeReceived(CodeReceivedInEmailRequestDTO body, PasswordRecovery passwordRecovery) {
-        if (passwordRecovery.getRecoveryCode() == null)
-            throw new InvalidCodeException("INVALID REQUEST");
-        if (!passwordRecovery.getRecoveryCode().equals(body.code()))
-            throw new InvalidCodeException("INVALID CODE");
-        if (passwordRecovery.getCodeCreatedAt().isBefore(LocalDateTime.now().minusMinutes(10).toInstant(ZoneOffset.of("-3")))) {
-            throw new ExpiredCodeException("CODE EXPIRE");
-        }
+        if (passwordRecovery.getRecoveryCode() == null) throw new InvalidCodeException("INVALID REQUEST");
+        if (!passwordRecovery.getRecoveryCode().equals(body.code()))  throw new InvalidCodeException("INVALID CODE");
+        if (passwordRecovery.getCodeCreatedAt().isBefore(LocalDateTime.now().minusMinutes(10).toInstant(ZoneOffset.of("-3"))))
+            throw new ExpiredCodeException("CODE EXPIRED");
     }
 }
