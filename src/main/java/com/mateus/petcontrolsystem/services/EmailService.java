@@ -13,9 +13,9 @@ public class EmailService {
 
     public void sendCodeToEmail(String code, String email) {
 
-        String message = "Seu código de verificação é " + code + "\nSeu código tem duração de 10 minutos.";
+        var message = String.format("Seu código de verificação é %s\nSeu código tem duração de 10 minutos.", code);
 
-        SimpleMailMessage emailToSend = new SimpleMailMessage();
+        var emailToSend = new SimpleMailMessage();
         emailToSend.setTo(email);
         emailToSend.setSubject("Código de verificação - PetControl System");
         emailToSend.setText(message);
@@ -33,9 +33,9 @@ public class EmailService {
                 "Atenciosamente,\n" +
                 "Equipe PetControl System";
 
-        SimpleMailMessage emailToSend = new SimpleMailMessage();
+        var emailToSend = new SimpleMailMessage();
         emailToSend.setTo(email);
-        emailToSend.setSubject("Boas vindas ao PetControl System!");
+        emailToSend.setSubject("Boas vindas - PetControl System!");
         emailToSend.setText(message);
 
         sendEmail(emailToSend);
@@ -56,7 +56,7 @@ public class EmailService {
 
     public void sendUpdateDataToEmail(String email, String name) {
 
-        String message = "Olá " + name + ",\n"+
+        var message = "Olá " + name + ",\n"+
                 "\n" +
                 "Gostaríamos de informar que os seus dados foram atualizados com sucesso em nosso sistema.\n" +
                 "\n" +
@@ -66,7 +66,7 @@ public class EmailService {
                 "Atenciosamente,\n" +
                 "Equipe PetControl System";
 
-        SimpleMailMessage emailToSend = new SimpleMailMessage();
+        var emailToSend = new SimpleMailMessage();
         emailToSend.setTo(email);
         emailToSend.setSubject("Boas vindas ao PetControl System!");
         emailToSend.setText(message);
@@ -76,7 +76,7 @@ public class EmailService {
 
     public void sendEmailNewPasswordSet(String email, String name) {
 
-        String message = "Olá " + name + ",\n"+
+        var message = "Olá " + name + ",\n"+
                 "\n" +
                 "Gostaríamos de informar que sua senha foi atualizada com sucesso em nosso sistema.\n" +
                 "\n" +
@@ -86,7 +86,7 @@ public class EmailService {
                 "Atenciosamente,\n" +
                 "Equipe PetControl System";
 
-        SimpleMailMessage emailToSend = new SimpleMailMessage();
+        var emailToSend = new SimpleMailMessage();
         emailToSend.setTo(email);
         emailToSend.setSubject("Boas vindas ao PetControl System!");
         emailToSend.setText(message);

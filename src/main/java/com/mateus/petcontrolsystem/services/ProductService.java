@@ -26,14 +26,14 @@ public class ProductService {
         Optional<Product> isExistingProduct = repository.findByNameAndSupplier(dto.name(), dto.supplier());
         if (isExistingProduct.isPresent()) throw new EntityAlreadyExistsException("PRODUCT ALREADY EXISTS");
 
-        Product newProduct = mapper.convertValue(dto, Product.class);
+        var newProduct = mapper.convertValue(dto, Product.class);
         repository.save(newProduct);
     }
 
     @Transactional
     public void update(ProductDTO dto) throws Exception {
         if (dto.id() == null) throw new EntityNotFoundException("PRODUCT NOT FOUND");
-        Product entity = repository.findById(dto.id()).orElseThrow(() -> new EntityNotFoundException("PRODUCT NOT FOUND"));
+        var entity = repository.findById(dto.id()).orElseThrow(() -> new EntityNotFoundException("PRODUCT NOT FOUND"));
 
         entity= mapper.updateValue(entity, dto);
         repository.save(entity);
@@ -49,7 +49,7 @@ public class ProductService {
 
     @Transactional
     public void delete(Long id) {
-        Product result = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("PRODUCT NOT FOUND"));
+        var result = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("PRODUCT NOT FOUND"));
         repository.delete(result);
     }
 }

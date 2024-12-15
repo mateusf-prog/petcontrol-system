@@ -1,7 +1,6 @@
 package com.mateus.petcontrolsystem.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mateus.petcontrolsystem.models.Product;
 import com.mateus.petcontrolsystem.models.Service;
 import com.mateus.petcontrolsystem.dto.ServiceDTO;
 import com.mateus.petcontrolsystem.repositories.ServiceRepository;
@@ -13,9 +12,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
-
-
-/** This class is the class of Service domain, this name is to avoid name duplication */
 
 @org.springframework.stereotype.Service
 @RequiredArgsConstructor
@@ -54,7 +50,7 @@ public class ServiceManagement {
 
     @Transactional
     public void delete(Long id) {
-        Service result = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("SERVICE NOT FOUND"));
+        var result = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("SERVICE NOT FOUND"));
         repository.delete(result);
     }
 }

@@ -28,19 +28,20 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public LoginResponseDTO login(LoginRequestDTO body) {
-        User user = repository.findByEmail(body.email()).orElseThrow(
+        var user = repository.findByEmail(body.email()).orElseThrow(
                 () -> new ResourceNotFoundException("USER NOT FOUND"));
 
         if (!passwordEncoder.matches(body.password(), user.getPassword())) {
             throw new InvalidPasswordException("INVALID PASSWORD");
         }
+
         return new LoginResponseDTO(user.getId(), tokenService.generateToken(user));
     }
 
     @Transactional
     public void register(RegisterRequestDTO body) {
 
-        User user = repository.findByEmailOrCpfCnpj(body.email(), body.cpfCnpj());
+        var user = repository.findByEmailOrCpfCnpj(body.email(), body.cpfCnpj());
         if (user != null) {
             if (user.getEmail().equals(body.email()))
                 throw new EntityAlreadyExistsException("USER ALREADY EXISTS BY EMAIL");
@@ -49,7 +50,7 @@ public class UserService {
                 throw new EntityAlreadyExistsException("USER ALREADY EXISTS BY CPF/CNPJ");
         }
 
-        User newUser = mapper.convertValue(body, User.class);
+        var newUser = mapper.convertValue(body, User.class);
         newUser.setPassword(passwordEncoder.encode(body.password()));
         repository.save(newUser);
         emailService.sendWelcomeMessageToNewUser(newUser.getEmail(), newUser.getName());
@@ -58,10 +59,10 @@ public class UserService {
     @Transactional
     public UpdateUserDTO update(UpdateUserDTO body) throws JsonMappingException {
 
-        User entity = repository.findByCpfCnpj(body.cpfCnpj()).orElseThrow(
+        var entity = repository.findByCpfCnpj(body.cpfCnpj()).orElseThrow(
                 () -> new EntityNotFoundException("ENTITY NOT FOUND"));
 
-        User userUpdated = mapper.updateValue(entity, body);
+        var userUpdated = mapper.updateValue(entity, body);
         repository.save(userUpdated);
         return mapper.convertValue(userUpdated, UpdateUserDTO.class);
     }
@@ -77,7 +78,7 @@ public class UserService {
         Optional<User> optionalUser = repository.findById(id);
         if (optionalUser.isEmpty()) throw new EntityNotFoundException("ENTITY NOT FOUND");
 
-        User user = optionalUser.get();
+        var user = optionalUser.get();
         if (!passwordEncoder.matches(body.actualPassword(), user.getPassword()))
             throw new InvalidPasswordException("OLD PASSWORD INVALID");
 
@@ -85,12 +86,13 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(body.newPassword()));
         repository.save(user);
         emailService.sendUpdateDataToEmail(body.email(), user.getName());
+
         return mapper.convertValue(user, UserAccessDataResponseDTO.class);
     }
 
     @Transactional(readOnly = true)
     public GetUserDataResponseDTO getUserById(Long id) {
-        User entity = repository.findById(id).orElseThrow(
+        var entity = repository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("ENTITY NOT FOUND"));
 
         return mapper.convertValue(entity, GetUserDataResponseDTO.class);
