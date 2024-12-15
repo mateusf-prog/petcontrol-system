@@ -23,9 +23,7 @@ public class ServiceManagement {
     @Transactional(readOnly = true)
     public Page<ServiceDTO> findAll(Pageable page) {
         Page<Service> result = repository.findAll(page);
-        if (result.isEmpty()) {
-            throw new EntityNotFoundException("SERVICES NOT FOUND");
-        }
+        if (result.isEmpty()) throw new EntityNotFoundException("SERVICES NOT FOUND");
 
         return result.map(x -> mapper.convertValue(x, ServiceDTO.class));
     }
@@ -33,18 +31,16 @@ public class ServiceManagement {
     @Transactional
     public void create(ServiceDTO dto) {
         Optional<Service> isExistsServiceByName = repository.findByName(dto.name());
-        if (isExistsServiceByName.isPresent()) {
-            throw new EntityAlreadyExistsException(("ALREADY EXISTS SERVICE WITH THE SAME NAME"));
-        }
+        if (isExistsServiceByName.isPresent()) throw new EntityAlreadyExistsException(("ALREADY EXISTS SERVICE WITH THE SAME NAME"));
+
         repository.save(mapper.convertValue(dto, Service.class));
     }
 
     @Transactional
     public void update(ServiceDTO dto) {
         Optional<Service> isExistsServiceByName = repository.findByName(dto.name());
-        if (isExistsServiceByName.isPresent()) {
-            throw new EntityAlreadyExistsException(("ALREADY EXISTS SERVICE WITH THE SAME NAME"));
-        }
+        if (isExistsServiceByName.isPresent()) throw new EntityAlreadyExistsException(("ALREADY EXISTS SERVICE WITH THE SAME NAME"));
+
         repository.save(mapper.convertValue(dto, Service.class));
     }
 

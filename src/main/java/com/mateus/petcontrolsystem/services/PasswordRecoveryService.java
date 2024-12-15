@@ -96,12 +96,9 @@ public class PasswordRecoveryService {
     }
 
     public void validateCodeReceived(CodeReceivedInEmailRequestDTO body, PasswordRecovery passwordRecovery) {
-        if (passwordRecovery.getRecoveryCode() == null)
-            throw new InvalidCodeException("INVALID REQUEST");
-        if (!passwordRecovery.getRecoveryCode().equals(body.code()))
-            throw new InvalidCodeException("INVALID CODE");
-        if (passwordRecovery.getCodeCreatedAt().isBefore(LocalDateTime.now().minusMinutes(10).toInstant(ZoneOffset.of("-3")))) {
+        if (passwordRecovery.getRecoveryCode() == null) throw new InvalidCodeException("INVALID REQUEST");
+        if (!passwordRecovery.getRecoveryCode().equals(body.code()))  throw new InvalidCodeException("INVALID CODE");
+        if (passwordRecovery.getCodeCreatedAt().isBefore(LocalDateTime.now().minusMinutes(10).toInstant(ZoneOffset.of("-3"))))
             throw new ExpiredCodeException("CODE EXPIRE");
-        }
     }
 }

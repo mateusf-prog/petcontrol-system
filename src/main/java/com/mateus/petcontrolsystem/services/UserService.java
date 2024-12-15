@@ -42,13 +42,8 @@ public class UserService {
     public void register(RegisterRequestDTO body) {
 
         var user = repository.findByEmailOrCpfCnpj(body.email(), body.cpfCnpj());
-        if (user != null) {
-            if (user.getEmail().equals(body.email()))
-                throw new EntityAlreadyExistsException("USER ALREADY EXISTS BY EMAIL");
 
-            if (user.getCpfCnpj().equals(body.cpfCnpj()))
-                throw new EntityAlreadyExistsException("USER ALREADY EXISTS BY CPF/CNPJ");
-        }
+        if (user != null) throw new EntityAlreadyExistsException("USER ALREADY EXISTS");
 
         var newUser = mapper.convertValue(body, User.class);
         newUser.setPassword(passwordEncoder.encode(body.password()));
@@ -64,6 +59,7 @@ public class UserService {
 
         var userUpdated = mapper.updateValue(entity, body);
         repository.save(userUpdated);
+
         return mapper.convertValue(userUpdated, UpdateUserDTO.class);
     }
 
@@ -71,16 +67,13 @@ public class UserService {
     public UserAccessDataResponseDTO updateAccessData(UserAccessDataRequestDTO body, Long id) {
 
         Optional<User> existsByEmail = repository.findByEmail(body.email());
-        if (existsByEmail.isPresent()) {
-            throw new EntityAlreadyExistsException("EMAIL ALREADY IN USE");
-        }
+        if (existsByEmail.isPresent()) throw new EntityAlreadyExistsException("EMAIL ALREADY IN USE");
 
         Optional<User> optionalUser = repository.findById(id);
         if (optionalUser.isEmpty()) throw new EntityNotFoundException("ENTITY NOT FOUND");
 
         var user = optionalUser.get();
-        if (!passwordEncoder.matches(body.actualPassword(), user.getPassword()))
-            throw new InvalidPasswordException("OLD PASSWORD INVALID");
+        if (!passwordEncoder.matches(body.actualPassword(), user.getPassword())) throw new InvalidPasswordException("INVALID CURENT PASSWORD");
 
         user.setEmail(body.email());
         user.setPassword(passwordEncoder.encode(body.newPassword()));
