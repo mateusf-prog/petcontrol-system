@@ -1,6 +1,8 @@
 package com.mateus.petcontrolsystem.services;
 
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.mail.*;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 public class EmailService {
 
     private final JavaMailSender mailSender;
+    private static final Logger logger = LoggerFactory.getLogger(EmailService.class);
 
     public void sendCodeToEmail(String code, String email) {
 
@@ -42,15 +45,14 @@ public class EmailService {
     }
 
     public void sendEmail(SimpleMailMessage data) {
-
         try {
             mailSender.send(data);
         } catch (MailSendException e) {
-            throw new MailSendException("ERROR SENDING EMAIL CODE");
+            logger.error("ERROR SENDING EMAIL CODE", e);
         } catch (MailAuthenticationException e) {
-            throw new MailAuthenticationException("ERROR AUTHENTICATE MAIL SERVER");
+            logger.error("ERROR AUTHENTICATE MAIL SERVER", e);
         } catch (MailPreparationException e) {
-            throw new MailPreparationException("ERROR DURING PREPARATION EMAIL MESSAGE");
+            logger.error("ERROR DURING PREPARATION EMAIL MESSAGE", e);
         }
     }
 
