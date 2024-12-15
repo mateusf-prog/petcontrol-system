@@ -27,7 +27,7 @@ public class EmailService {
     }
 
     public void sendWelcomeMessageToNewUser(String email, String name) {
-        String message = "Olá " + name + "\n"+
+        var message = "Olá " + name + "\n"+
                 "\n" +
                 "Seja bem-vindo ao PetControl System! Estamos muito felizes por você ter se juntado a nós.\n" +
                 "\n" +

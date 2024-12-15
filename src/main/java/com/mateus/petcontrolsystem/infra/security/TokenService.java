@@ -21,8 +21,8 @@ public class TokenService {
 
     public String generateToken(User user) {
         try {
-            Algorithm algorithm = Algorithm.HMAC256(secret);
-            String token = JWT.create()
+            var algorithm = Algorithm.HMAC256(secret);
+            var token = JWT.create()
                     .withIssuer("login-auth-api")
                     .withSubject(user.getEmail())
                     .withExpiresAt(generateExpirationDate())
@@ -35,8 +35,8 @@ public class TokenService {
 
     public String generateTemporaryTokenToRecoveryPassword (User user) {
         try {
-            Algorithm algorithm = Algorithm.HMAC256(secret);
-            String token = JWT.create()
+            var algorithm = Algorithm.HMAC256(secret);
+            var token = JWT.create()
                     .withIssuer("login-auth-api")
                     .withSubject(user.getEmail())
                     .withExpiresAt(LocalDateTime.now().plusMinutes(15).toInstant(ZoneOffset.of("-3")))
@@ -53,7 +53,7 @@ public class TokenService {
 
     public String validateToken(String token) {
         try {
-            Algorithm algorithm = Algorithm.HMAC256(secret);
+            var algorithm = Algorithm.HMAC256(secret);
             return JWT.require(algorithm)
                     .withIssuer("login-auth-api")
                     .build()
