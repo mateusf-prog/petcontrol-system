@@ -24,6 +24,7 @@ public class ProductService {
     @Transactional
     public void create(ProductDTO dto) {
         Optional<Product> isExistingProduct = repository.findByNameAndSupplier(dto.name(), dto.supplier());
+
         if (isExistingProduct.isPresent()) throw new EntityAlreadyExistsException("PRODUCT ALREADY EXISTS");
 
         var newProduct = mapper.convertValue(dto, Product.class);

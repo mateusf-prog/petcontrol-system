@@ -99,6 +99,6 @@ public class PasswordRecoveryService {
         if (passwordRecovery.getRecoveryCode() == null) throw new InvalidCodeException("INVALID REQUEST");
         if (!passwordRecovery.getRecoveryCode().equals(body.code()))  throw new InvalidCodeException("INVALID CODE");
         if (passwordRecovery.getCodeCreatedAt().isBefore(LocalDateTime.now().minusMinutes(10).toInstant(ZoneOffset.of("-3"))))
-            throw new ExpiredCodeException("CODE EXPIRE");
+            throw new ExpiredCodeException("CODE EXPIRED");
     }
 }
